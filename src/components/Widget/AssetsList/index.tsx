@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { getWalletAssets } from 'src/api';
 import { getAssetId, getImgFromAsset } from 'src/utils';
-import { PrimitiveAsset } from './types';
+import { PrimitiveAsset } from '../types';
 import s from './styles.module.scss';
 
 const AssetsList = ({
@@ -58,7 +58,7 @@ const AssetsList = ({
 
   return (
     <div
-      className={cn(s.widgetAssets, { [s._static]: isStatic, [s._compact]: isCompact })}
+      className={cn(s.assets, { [s._static]: isStatic, [s._compact]: isCompact })}
       style={{ '--items-per-row': assetsPerRow } as any}
     >
       {assetsLoading
@@ -71,13 +71,13 @@ const AssetsList = ({
             return (
               <div
                 key={id}
-                className={cn(s.widgetAsset, { [s._selected]: !!selectedAssets.find((a) => a.id === id) })}
+                className={cn(s.assetsItem, { [s._selected]: !!selectedAssets.find((a) => a.id === id) })}
                 onClick={() => handleAssetSelect({ id, img, name: asset.metadata?.name })}
               >
-                <div className={s.widgetAssetImg}>
+                <div className={s.assetsItemImg}>
                   {img ? <img src={img} alt="" /> : <div />}
                 </div>
-                <div className={s.widgetAssetContent}>
+                <div className={s.assetsItemContent}>
                   <p title={tokenId}>{tokenId}</p>
                 </div>
               </div>
