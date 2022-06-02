@@ -3,7 +3,7 @@
   "version": "1.0.5",
   "private": true,
   "dependencies": {
-    "@gomuweb3/sdk": "gomuweb3/gomu#workspace=@gomuweb3/sdk&commit=e105980ec2820b8d4a3c052844baaa733f3ae84e",
+    "@gomuweb3/sdk": "^0.1.1",
     "@metamask/onboarding": "^1.0.1",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",

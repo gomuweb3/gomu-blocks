@@ -1,11 +1,15 @@
 ## Getting Started
 
-This project requires `yarn 3` with `pnp`
+This project requires first version of yarn.
+
+```bash
+yarn set version 1.22.1
+```
 
 To install packages:
 
 ```bash
-yarn install
+yarn
 ```
 
 To run dev server:
