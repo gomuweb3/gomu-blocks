@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { getWalletAssets } from 'src/api';
-import { getAssetId, getImgFromAsset } from 'src/utils';
+import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
 import { PrimitiveAsset } from '../types';
 import s from './styles.module.scss';
 
@@ -72,7 +72,17 @@ const AssetsList = ({
       style={{ '--items-per-row': assetsPerRow } as any}
     >
       {assetsLoading
-        ? null // TODO add loading placeholders
+        ? rangeFromZero(6).map((index) => {
+          return (
+            <div
+              key={index}
+              className={cn(s.assetsItem, 'g-processing')}
+            >
+              <div className={s.assetsItemImg} />
+              <div className={s.assetsItemContent} />
+            </div>
+          );
+        })
         : walletAssets?.data.map((asset) => {
             const id = getAssetId(asset);
             const img = getImgFromAsset(asset);
