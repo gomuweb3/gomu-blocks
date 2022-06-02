@@ -2,6 +2,7 @@ import { useState } from 'react';
 import cn from 'classnames';
 import { AddressBox } from 'src/components';
 import { GomuLogoBox, PoweredByLogoPurple } from 'src/assets/svg';
+import { ERC20_TOKENS } from './constants';
 import AssetsList from './AssetsList';
 import ListingFlow from './ListingFlow';
 import s from './styles.module.scss';
@@ -29,6 +30,7 @@ const Widget = ({
   const [isListingFlowActive, setIsListingFlowActive] = useState(false);
 
   const activeTabConfig = TABS_CONFIG.find((tabConfig) => tabConfig.key === activeTab)!;
+  const erc20Tokens = ERC20_TOKENS[chainId] || [];
 
   return (
     <div className={cn(s.widget, s._mobile)}>
@@ -37,6 +39,7 @@ const Widget = ({
           <ListingFlow
             userAddress={userAddress}
             chainId={chainId}
+            erc20Tokens={erc20Tokens}
             maxSelectableAssets={maxSelectableAssets}
             onClose={() => setIsListingFlowActive(false)}
           />

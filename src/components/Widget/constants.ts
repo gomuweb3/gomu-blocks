@@ -1,6 +1,6 @@
 import { TokenInfo } from './types';
 
-export const TOKENS: Record<number, TokenInfo[]> = {
+export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   1: [
     {
       symbol: 'WETH',

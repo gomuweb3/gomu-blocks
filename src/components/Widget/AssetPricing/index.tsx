@@ -1,18 +1,20 @@
 import { Dropdown } from 'src/components';
 import { parseAssetId } from 'src/utils';
 import Checkbox from '../Checkbox';
-import { TOKENS, MARKETPLACES } from '../constants';
-import { PricedAsset } from '../types';
+import { MARKETPLACES } from '../constants';
+import { PricedAsset, TokenInfo } from '../types';
 import s from './styles.module.scss';
 
 const AssetPricing = ({
   asset,
-  chainId,
+  erc20Tokens,
   onChange,
+  onConfirm,
 }: {
   asset: PricedAsset;
-  chainId: number;
+  erc20Tokens: TokenInfo[];
   onChange: (updatedAsset: PricedAsset) => void;
+  onConfirm: () => void;
 }) => {
   const { id, name, img, amount, paymentTokenAddress, selectedMarketplaces } = asset;
   const { tokenId } = parseAssetId(id);
@@ -32,10 +34,13 @@ const AssetPricing = ({
     handleChange({ selectedMarketplaces: newSelectedMarketplaces });
   };
 
-  const activeChainTokens = TOKENS[chainId] || [];
+  const handleConfirm = (e: any) => {
+    e.preventDefault();
+    onConfirm();
+  };
 
   return (
-    <div className={s.pricing}>
+    <form className={s.pricing} onSubmit={handleConfirm}>
       <div className={s.pricingAsset}>
         <div className={s.pricingAssetImg}>
           {img && <img src={img} alt={name} />}
@@ -55,7 +60,7 @@ const AssetPricing = ({
           onChange={(e) => handleChange({ amount: e.target.value })}
         />
         <Dropdown
-          items={activeChainTokens.map(({ address, symbol }) => ({ id: address, label: symbol }))}
+          items={erc20Tokens.map(({ address, symbol }) => ({ id: address, label: symbol }))}
           isSelectDropdown
           selectedId={paymentTokenAddress}
           rightAligned
@@ -81,7 +86,7 @@ const AssetPricing = ({
           );
         })}
       </div>
-    </div>
+    </form>
   );
 };
 

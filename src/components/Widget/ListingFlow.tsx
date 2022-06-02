@@ -6,8 +6,8 @@ import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRigh
 import AssetsList from './AssetsList';
 import AssetPricing from './AssetPricing';
 import AssetsConfirmation from './AssetsConfirmation';
-import { TOKENS, MARKETPLACES } from './constants';
-import { PrimitiveAsset, PricedAsset } from './types';
+import { MARKETPLACES } from './constants';
+import { PrimitiveAsset, PricedAsset, TokenInfo } from './types';
 import s from './styles.module.scss';
 
 const ICONS_MAPPING: Record<string, any> = {
@@ -20,11 +20,13 @@ const ICONS_MAPPING: Record<string, any> = {
 const ListingFlow = ({
   userAddress,
   chainId,
+  erc20Tokens,
   maxSelectableAssets = 4,
   onClose,
 }: {
   userAddress: string;
   chainId: number;
+  erc20Tokens: TokenInfo[];
   maxSelectableAssets?: number;
   onClose: () => void;
 }) => {
@@ -32,7 +34,7 @@ const ListingFlow = ({
   const [activePricingSubstepIndex, setActivePricingSubstepIndex] = useState(0);
   const [selectedAssets, setSelectedAssets] = useState<PrimitiveAsset[]>([]);
   const [pricedAssets, setPricedAssets] = useState<PricedAsset[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditingAsset, setIsEditingAsset] = useState(false);
 
   const STEPS_CONFIG = [
     {
@@ -49,7 +51,7 @@ const ListingFlow = ({
           return {
             ...asset,
             amount: '',
-            paymentTokenAddress: TOKENS[chainId]?.[0]?.address,
+            paymentTokenAddress: erc20Tokens[0]?.address,
             selectedMarketplaces: MARKETPLACES.map((mp) => mp.key),
           };
         });
@@ -92,8 +94,9 @@ const ListingFlow = ({
         return (
           <AssetPricing
             asset={pricedAssets[activePricingSubstepIndex]}
-            chainId={chainId}
+            erc20Tokens={erc20Tokens}
             onChange={handlePricedAssetChange}
+            onConfirm={handleConfirm}
           />
         );
       },
@@ -102,33 +105,28 @@ const ListingFlow = ({
       key: 'confirmation',
       label: 'Check your listing details ',
       confirmLabel: 'Confirm',
-      editingConfirmLabel: 'Done',
       iconName: 'menu',
       withBackButton: true,
       validationCheck: () => true,
       onConfirm: () => {
-        if (isEditing) {
-          return setIsEditing(false);
-        }
-
         setActiveStepIndex(activeStepIndex + 1);
       },
       componentRenderer: () => {
         return (
           <AssetsConfirmation
             assets={pricedAssets}
-            onEdit={() => setIsEditing(true)}
+            erc20Tokens={erc20Tokens}
             onRemoveAsset={(id) => {
               setSelectedAssets(selectedAssets.filter((a) => a.id !== id));
               setPricedAssets(pricedAssets.filter((a) => a.id !== id));
             }}
-            onClickAsset={(id) => {
+            onEditAsset={(id) => {
               const pricingStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'pricing');
               const assetIndex = pricedAssets.findIndex((a) => a.id === id);
 
               setActiveStepIndex(pricingStepIndex);
               setActivePricingSubstepIndex(assetIndex);
-              setIsEditing(false);
+              setIsEditingAsset(true);
             }}
           />
         );
@@ -155,7 +153,18 @@ const ListingFlow = ({
     setSelectedAssets(assets);
   };
 
+  const returnToConfirmationFromEditing = () => {
+    const confirmationStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'confirmation');
+    setActiveStepIndex(confirmationStepIndex);
+    setActivePricingSubstepIndex(pricedAssets.length - 1);
+    setIsEditingAsset(false);
+  }
+
   const handleBack = () => {
+    if (isEditingAsset) {
+      return returnToConfirmationFromEditing();
+    }
+
     if (activeStepConfig.withPricingSubsteps && activePricingSubstepIndex !== 0) {
       return setActivePricingSubstepIndex(activePricingSubstepIndex - 1);
     }
@@ -164,11 +173,14 @@ const ListingFlow = ({
   };
 
   const handleConfirm = () => {
-    if (isEditing && !pricedAssets.length) {
-      setSelectedAssets([]);
-      setActivePricingSubstepIndex(0);
-      return setActiveStepIndex(0);
+    if (!activeStepConfig.validationCheck()) {
+      return;
     }
+
+    if (isEditingAsset) {
+      return returnToConfirmationFromEditing();
+    }
+
     activeStepConfig.onConfirm();
   };
 
@@ -189,14 +201,8 @@ const ListingFlow = ({
   };
 
   const getConfirmLabel = () => {
-    if (isEditing) {
-      if (!pricedAssets.length) {
-        return 'Return to Step 1';
-      }
-
-      if (activeStepConfig.editingConfirmLabel) {
-        return activeStepConfig.editingConfirmLabel;
-      }
+    if (isEditingAsset) {
+      return activeStepConfig.confirmLabel;
     }
 
     if (activeStepConfig.withPricingSubsteps
@@ -279,7 +285,7 @@ const ListingFlow = ({
         <div className={cn(s.widgetContentFooter, { [s._withPreviews]: activeStepConfig.withAssetsPreviews })}>
           <div className={s.widgetContentFooterInner}>
             {renderFooterLeftSection()}
-            {activeStepConfig.withPricingSubsteps && (
+            {(activeStepConfig.withPricingSubsteps && !isEditingAsset) && (
               <div className={s.widgetContentFooterSubsteps}>
                 {activePricingSubstepIndex + 1} of {selectedAssets.length}
               </div>
@@ -297,7 +303,7 @@ const ListingFlow = ({
               onClick={handleConfirm}
             >
               {getConfirmLabel()}
-              {(!isEditing && activeStepIndex !== STEPS_CONFIG.length - 1) && (
+              {activeStepIndex !== STEPS_CONFIG.length - 1 && (
                 <CaretRightIcon />
               )}
             </button>
