@@ -11,9 +11,10 @@ const AssetsConfirmation = ({
 }: {
   assets: PricedAsset[];
   erc20Tokens: TokenInfo[];
-  onRemoveAsset: (id: string) => void;
-  onEditAsset: (id: string) => void;
+  onRemoveAsset?: (id: string) => void;
+  onEditAsset?: (id: string) => void;
 }) => {
+  console.log(assets);
   return (
     <div className={s.confirmation}>
       {assets.map(({ id, img, name, amount, paymentTokenAddress, selectedMarketplaces }) => {
@@ -54,18 +55,20 @@ const AssetsConfirmation = ({
                 );
               })}
             </div>
-            {assets.length > 1 && (
+            {(onRemoveAsset && assets.length > 1) && (
               <div
                 className={s.assetRemove}
                 onClick={() => onRemoveAsset(id)}
               />
             )}
-            <div
-              className={s.assetEdit}
-              onClick={() => onEditAsset(id)}
-            >
-              Edit
-            </div>
+            {onEditAsset && (
+              <div
+                className={s.assetEdit}
+                onClick={() => onEditAsset(id)}
+              >
+                Edit
+              </div>
+            )}
           </div>
         );
       })}

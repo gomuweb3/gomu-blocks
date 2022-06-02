@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 import { NftAsset } from 'src/typings';
 
@@ -45,4 +46,11 @@ export const getAssetId = (asset: { tokenAddress: string; tokenId: string | null
 export const parseAssetId = (id: string) => {
   const [tokenAddress, tokenId] = id.split('-');
   return { tokenAddress, tokenId };
+};
+
+export const toBaseUnitAmount = (value: number | string, decimals = 0) => {
+  const amount = BigNumber.from(value);
+  const unit = BigNumber.from(10).pow(decimals);
+  const baseUnitAmount = amount.mul(unit);
+  return String(baseUnitAmount);
 };

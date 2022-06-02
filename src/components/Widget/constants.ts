@@ -1,4 +1,4 @@
-import { TokenInfo } from './types';
+import { TokenInfo, MarketplaceConfig } from './types';
 
 export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   1: [
@@ -43,7 +43,7 @@ export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   ],
 };
 
-export const MARKETPLACES = [
+export const MARKETPLACES: MarketplaceConfig[] = [
   {
     key: 'opensea',
     label: 'OpenSea',

@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { getWalletAssets } from 'src/api';
 import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
+import { NftAsset } from 'src/typings';
 import { PrimitiveAsset } from '../types';
 import s from './styles.module.scss';
 
@@ -33,25 +34,33 @@ const AssetsList = ({
     { enabled: !!userAddress },
   );
 
+  const convertToPrimitiveAsset = (asset: NftAsset) => {
+    const id = getAssetId(asset);
+    const img = getImgFromAsset(asset);
+    const { name } = asset.metadata || {};
+
+    return { id, type: asset.type, img, name } as PrimitiveAsset;
+  };
+
   useEffect(() => {
     if (selectedIds && selectedIds.length !== selectedAssets.length) {
       const newAssets = walletAssets?.data.reduce((acc, asset) => {
         const id = getAssetId(asset);
-        const img = getImgFromAsset(asset);
-        const { name } = asset.metadata || {};
         if (!selectedIds.includes(id)) {
           return acc;
         }
 
-        acc.push({ id, img, name });
+        acc.push(convertToPrimitiveAsset(asset));
         return acc;
       }, [] as PrimitiveAsset[]) || [];
       setSelectedAssets(newAssets);
     }
   }, [selectedIds]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleAssetSelect = (asset: PrimitiveAsset) => {
+  const handleAssetSelect = (_asset: NftAsset) => {
     if (isStatic) return;
+
+    const asset = convertToPrimitiveAsset(_asset);
 
     const newSelectedAssets = selectedAssets.find((a) => a.id === asset.id)
       ? selectedAssets.filter((a) => a.id !== asset.id)
@@ -95,7 +104,7 @@ const AssetsList = ({
                   s.assetsItem,
                   { [s._selected]: !!selectedAssets.find((a) => a.id === id) },
                 )}
-                onClick={() => handleAssetSelect({ id, img, name: asset.metadata?.name })}
+                onClick={() => handleAssetSelect(asset)}
               >
                 <div className={s.assetsItemImg}>
                   {img ? <img src={img} alt="" /> : <div />}

@@ -1,5 +1,11 @@
 import { SupportedTokenType, NftAssetOriginal, NftAsset } from 'src/typings';
 
+const SUPPORTED_TOKENS_TYPES: SupportedTokenType[] = [
+  'ERC20',
+  'ERC721',
+  'ERC1155',
+];
+
 interface GetWalletAssetsOptions {
   address: string;
   contractAddress?: string;
@@ -38,7 +44,7 @@ const transformNftAssets = (nfts: NftAssetOriginal[], includeNonStandardTokenTyp
   const transformedData = nfts.map(transformNftAssetData);
   return includeNonStandardTokenTypes
     ? transformedData
-    : transformedData.filter((a) => !!SupportedTokenType[a.type]);
+    : transformedData.filter((a) => SUPPORTED_TOKENS_TYPES.includes(a.type));
 };
 
 export const getWalletAssets = ({

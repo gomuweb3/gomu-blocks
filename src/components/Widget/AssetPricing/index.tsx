@@ -2,7 +2,7 @@ import { Dropdown } from 'src/components';
 import { parseAssetId } from 'src/utils';
 import Checkbox from '../Checkbox';
 import { MARKETPLACES } from '../constants';
-import { PricedAsset, TokenInfo } from '../types';
+import { PricedAsset, TokenInfo, MarketplaceName } from '../types';
 import s from './styles.module.scss';
 
 const AssetPricing = ({
@@ -26,7 +26,7 @@ const AssetPricing = ({
     });
   };
 
-  const handleMarketplaceSelect = (key: string, isSelected: boolean) => {
+  const handleMarketplaceSelect = (key: MarketplaceName, isSelected: boolean) => {
     const newSelectedMarketplaces = isSelected
       ? selectedMarketplaces.concat(key)
       : selectedMarketplaces.filter((_key) => _key !== key);

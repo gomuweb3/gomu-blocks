@@ -228,6 +228,10 @@
         column-gap: 14px;
         min-height: var(--button-h);
         padding: 0 var(--pad-x);
+
+        &._finished {
+          justify-content: center;
+        }
       }
 
       &Substeps {

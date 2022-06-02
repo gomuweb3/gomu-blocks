@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import cn from 'classnames';
 import { AddressBox } from 'src/components';
-import { rangeFromZero } from 'src/utils';
+import { useGomuSdk } from 'src/hooks';
+import { rangeFromZero, parseAssetId, toBaseUnitAmount } from 'src/utils';
 import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRightIcon } from 'src/assets/svg';
 import AssetsList from './AssetsList';
 import AssetPricing from './AssetPricing';
@@ -35,6 +36,46 @@ const ListingFlow = ({
   const [selectedAssets, setSelectedAssets] = useState<PrimitiveAsset[]>([]);
   const [pricedAssets, setPricedAssets] = useState<PricedAsset[]>([]);
   const [isEditingAsset, setIsEditingAsset] = useState(false);
+  const [isListingOrders, setIsListingOrders] = useState(false);
+  const [isFinishedListing, setIsFinishedListing] = useState(false);
+  const gomuSdk = useGomuSdk(chainId, userAddress);
+
+  const listOrders = async () => {
+    await Promise.all(pricedAssets.map(async (asset) => {
+      const { id, type, amount, paymentTokenAddress, selectedMarketplaces } = asset;
+      const { tokenAddress: contractAddress, tokenId } = parseAssetId(id);
+      const { decimals } = erc20Tokens.find((t) => t.address === paymentTokenAddress) || {};
+
+      let orders: any[] = [];
+
+      try {
+        orders = await gomuSdk.makeSellOrder({
+          // @ts-ignore
+          assets: [{ type, contractAddress, tokenId, amount: 1n }],
+          erc20Asset: {
+            amount: BigInt(toBaseUnitAmount(amount, decimals)),
+            contractAddress: paymentTokenAddress,
+          },
+          marketplaces: selectedMarketplaces,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+
+      const updatedAsset = { ...asset, orders };
+      const updatedAssets = pricedAssets.map((a) => {
+        if (a.id === id) {
+          return updatedAsset;
+        }
+        return a;
+      });
+
+      setPricedAssets(updatedAssets);
+    }));
+
+    setIsListingOrders(false);
+    setIsFinishedListing(true);
+  };
 
   const STEPS_CONFIG = [
     {
@@ -53,6 +94,7 @@ const ListingFlow = ({
             amount: '',
             paymentTokenAddress: erc20Tokens[0]?.address,
             selectedMarketplaces: MARKETPLACES.map((mp) => mp.key),
+            orders: [],
           };
         });
         setPricedAssets(initialPricedAssets);
@@ -110,6 +152,8 @@ const ListingFlow = ({
       validationCheck: () => true,
       onConfirm: () => {
         setActiveStepIndex(activeStepIndex + 1);
+        setIsListingOrders(true);
+        listOrders();
       },
       componentRenderer: () => {
         return (
@@ -145,7 +189,12 @@ const ListingFlow = ({
         onClose();
       },
       componentRenderer: () => {
-        return 'Statuses';
+        return (
+          <AssetsConfirmation
+            assets={pricedAssets}
+            erc20Tokens={erc20Tokens}
+          />
+        );
       },
     },
   ];
@@ -287,7 +336,7 @@ const ListingFlow = ({
             { [s._withPreviews]: activeStepConfig.withAssetsPreviews },
           )}
         >
-          <div className={s.widgetContentFooterInner}>
+          <div className={cn(s.widgetContentFooterInner, { [s._finished]: isFinishedListing })}>
             {renderFooterLeftSection()}
             {(activeStepConfig.withPricingSubsteps
               && pricedAssets.length > 1
@@ -296,23 +345,25 @@ const ListingFlow = ({
                 {activePricingSubstepIndex + 1} of {pricedAssets.length}
               </div>
             )}
-            <button
-              type="button"
-              className={cn(
-                s.widgetContentFooterConfirm,
-                {
-                  [s._borderStyle]: activeStepConfig.withPricingSubsteps
-                    && activePricingSubstepIndex !== selectedAssets.length - 1,
-                },
-              )}
-              disabled={!activeStepConfig.validationCheck()}
-              onClick={handleConfirm}
-            >
-              {getConfirmLabel()}
-              {activeStepIndex !== STEPS_CONFIG.length - 1 && (
-                <CaretRightIcon />
-              )}
-            </button>
+            {!isListingOrders && (
+              <button
+                type="button"
+                className={cn(
+                  s.widgetContentFooterConfirm,
+                  {
+                    [s._borderStyle]: activeStepConfig.withPricingSubsteps
+                      && activePricingSubstepIndex !== selectedAssets.length - 1,
+                  },
+                )}
+                disabled={!activeStepConfig.validationCheck()}
+                onClick={handleConfirm}
+              >
+                {getConfirmLabel()}
+                {activeStepIndex !== STEPS_CONFIG.length - 1 && (
+                  <CaretRightIcon />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -1,8 +1,4 @@
-export enum SupportedTokenType {
-  ERC20,
-  ERC721,
-  ERC1155,
-};
+export type SupportedTokenType = 'ERC20' | 'ERC721' | 'ERC1155';
 
 export interface NftAssetMetadata {
   name: string;
