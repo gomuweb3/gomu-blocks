@@ -54,10 +54,12 @@ const AssetsConfirmation = ({
                 );
               })}
             </div>
-            <div
-              className={s.assetRemove}
-              onClick={() => onRemoveAsset(id)}
-            />
+            {assets.length > 1 && (
+              <div
+                className={s.assetRemove}
+                onClick={() => onRemoveAsset(id)}
+              />
+            )}
             <div
               className={s.assetEdit}
               onClick={() => onEditAsset(id)}

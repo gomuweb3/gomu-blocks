@@ -39,7 +39,7 @@ export const getImgFromAsset = (asset?: NftAsset, size: ImageSize = 'thumbnail')
 };
 
 export const getAssetId = (asset: { tokenAddress: string; tokenId: string | null; }) => {
-  return `${asset.tokenAddress}-${asset.tokenId}`;
+  return `${asset.tokenAddress?.toLowerCase()}-${asset.tokenId?.toLowerCase()}`;
 };
 
 export const parseAssetId = (id: string) => {

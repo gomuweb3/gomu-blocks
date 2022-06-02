@@ -35,8 +35,18 @@ const AssetsList = ({
 
   useEffect(() => {
     if (selectedIds && selectedIds.length !== selectedAssets.length) {
-      const newIds = selectedAssets.filter((a) => selectedIds.includes(a.id));
-      setSelectedAssets(newIds);
+      const newAssets = walletAssets?.data.reduce((acc, asset) => {
+        const id = getAssetId(asset);
+        const img = getImgFromAsset(asset);
+        const { name } = asset.metadata || {};
+        if (!selectedIds.includes(id)) {
+          return acc;
+        }
+
+        acc.push({ id, img, name });
+        return acc;
+      }, [] as PrimitiveAsset[]) || [];
+      setSelectedAssets(newAssets);
     }
   }, [selectedIds]); // eslint-disable-line react-hooks/exhaustive-deps
 

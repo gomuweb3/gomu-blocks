@@ -117,8 +117,11 @@ const ListingFlow = ({
             assets={pricedAssets}
             erc20Tokens={erc20Tokens}
             onRemoveAsset={(id) => {
+              const newPricedAssets = pricedAssets.filter((a) => a.id !== id);
+
               setSelectedAssets(selectedAssets.filter((a) => a.id !== id));
-              setPricedAssets(pricedAssets.filter((a) => a.id !== id));
+              setPricedAssets(newPricedAssets);
+              setActivePricingSubstepIndex(newPricedAssets.length - 1);
             }}
             onEditAsset={(id) => {
               const pricingStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'pricing');
@@ -153,18 +156,7 @@ const ListingFlow = ({
     setSelectedAssets(assets);
   };
 
-  const returnToConfirmationFromEditing = () => {
-    const confirmationStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'confirmation');
-    setActiveStepIndex(confirmationStepIndex);
-    setActivePricingSubstepIndex(pricedAssets.length - 1);
-    setIsEditingAsset(false);
-  }
-
   const handleBack = () => {
-    if (isEditingAsset) {
-      return returnToConfirmationFromEditing();
-    }
-
     if (activeStepConfig.withPricingSubsteps && activePricingSubstepIndex !== 0) {
       return setActivePricingSubstepIndex(activePricingSubstepIndex - 1);
     }
@@ -178,7 +170,10 @@ const ListingFlow = ({
     }
 
     if (isEditingAsset) {
-      return returnToConfirmationFromEditing();
+      const confirmationStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'confirmation');
+      setActiveStepIndex(confirmationStepIndex);
+      setActivePricingSubstepIndex(pricedAssets.length - 1);
+      return setIsEditingAsset(false);
     }
 
     activeStepConfig.onConfirm();
@@ -215,6 +210,10 @@ const ListingFlow = ({
   };
 
   const renderFooterLeftSection = () => {
+    if (isEditingAsset) {
+      return <div />;
+    }
+
     if (activeStepConfig.withBackButton) {
       return (
         <button
