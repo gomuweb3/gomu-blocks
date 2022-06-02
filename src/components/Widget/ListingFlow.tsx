@@ -5,6 +5,7 @@ import { rangeFromZero } from 'src/utils';
 import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRightIcon } from 'src/assets/svg';
 import AssetsList from './AssetsList';
 import AssetPricing from './AssetPricing';
+import AssetsConfirmation from './AssetsConfirmation';
 import { TOKENS, MARKETPLACES } from './constants';
 import { PrimitiveAsset, PricedAsset } from './types';
 import s from './styles.module.scss';
@@ -113,7 +114,24 @@ const ListingFlow = ({
         setActiveStepIndex(activeStepIndex + 1);
       },
       componentRenderer: () => {
-        return 'Confirmation';
+        return (
+          <AssetsConfirmation
+            assets={pricedAssets}
+            onEdit={() => setIsEditing(true)}
+            onRemoveAsset={(id) => {
+              setSelectedAssets(selectedAssets.filter((a) => a.id !== id));
+              setPricedAssets(pricedAssets.filter((a) => a.id !== id));
+            }}
+            onClickAsset={(id) => {
+              const pricingStepIndex = STEPS_CONFIG.findIndex((step) => step.key === 'pricing');
+              const assetIndex = pricedAssets.findIndex((a) => a.id === id);
+
+              setActiveStepIndex(pricingStepIndex);
+              setActivePricingSubstepIndex(assetIndex);
+              setIsEditing(false);
+            }}
+          />
+        );
       },
     },
     {

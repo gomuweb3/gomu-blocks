@@ -7,6 +7,8 @@ const AssetsConfirmation = ({
 }: {
   assets: PricedAsset[];
   onEdit: () => void;
+  onRemoveAsset: (id: string) => void;
+  onClickAsset: (id: string) => void;
 }) => {
   return (
     <div className={s.confirmation}>
