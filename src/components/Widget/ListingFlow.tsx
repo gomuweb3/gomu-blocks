@@ -175,13 +175,18 @@ const ListingFlow = ({
       if (!pricedAssets.length) {
         return 'Return to Step 1';
       }
+
       if (activeStepConfig.editingConfirmLabel) {
         return activeStepConfig.editingConfirmLabel;
       }
     }
-    if (activeStepConfig.withPricingSubsteps && activeStepConfig.intermediateConfirmLabel && activePricingSubstepIndex !== pricedAssets.length - 1) {
+
+    if (activeStepConfig.withPricingSubsteps
+      && activeStepConfig.intermediateConfirmLabel
+      && activePricingSubstepIndex !== pricedAssets.length - 1) {
       return activeStepConfig.intermediateConfirmLabel;
     }
+
     return activeStepConfig.confirmLabel;
   };
 
@@ -220,7 +225,7 @@ const ListingFlow = ({
       );
     }
 
-    return <div />;
+    return <div />; // empty div required for flex alignment with "justify-content: space-between"
   };
 
   return (
@@ -265,7 +270,10 @@ const ListingFlow = ({
               type="button"
               className={cn(
                 s.widgetContentFooterConfirm,
-                { [s._borderStyle]: activeStepConfig.withPricingSubsteps && activePricingSubstepIndex !== selectedAssets.length - 1 },
+                {
+                  [s._borderStyle]: activeStepConfig.withPricingSubsteps
+                    && activePricingSubstepIndex !== selectedAssets.length - 1,
+                },
               )}
               disabled={!activeStepConfig.validationCheck()}
               onClick={handleConfirm}

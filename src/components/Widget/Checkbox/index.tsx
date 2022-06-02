@@ -19,7 +19,7 @@ const Checkbox: FC<IProps> = ({
   onChange,
 }) => {
   return (
-    <label className={cn(s.checkbox, { [s._checked]: checked }, className, 'checkbox')}>
+    <label className={cn(s.checkbox, { [s._checked]: checked }, className)}>
       <input
         type="checkbox"
         name={name}

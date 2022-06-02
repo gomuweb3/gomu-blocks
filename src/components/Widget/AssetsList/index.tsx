@@ -71,7 +71,10 @@ const AssetsList = ({
             return (
               <div
                 key={id}
-                className={cn(s.assetsItem, { [s._selected]: !!selectedAssets.find((a) => a.id === id) })}
+                className={cn(
+                  s.assetsItem,
+                  { [s._selected]: !!selectedAssets.find((a) => a.id === id) },
+                )}
                 onClick={() => handleAssetSelect({ id, img, name: asset.metadata?.name })}
               >
                 <div className={s.assetsItemImg}>

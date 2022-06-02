@@ -37,6 +37,7 @@ const Widget = ({
           <ListingFlow
             userAddress={userAddress}
             chainId={chainId}
+            maxSelectableAssets={maxSelectableAssets}
             onClose={() => setIsListingFlowActive(false)}
           />
         )
@@ -66,7 +67,12 @@ const Widget = ({
               <div className={s.widgetContentHeader}>
                 <h3 className={s.widgetHeading}>{activeTabConfig.label}</h3>
                 {activeTab === 'nfts' && (
-                  <button type="button" onClick={() => setIsListingFlowActive(true)}>Sell</button>
+                  <button
+                    type="button"
+                    onClick={() => setIsListingFlowActive(true)}
+                  >
+                    Sell
+                  </button>
                 )}
               </div>
               <div className={s.widgetContentInner}>
