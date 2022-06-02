@@ -281,12 +281,19 @@ const ListingFlow = ({
         <div className={s.widgetContentInner}>
           {activeStepConfig.componentRenderer()}
         </div>
-        <div className={cn(s.widgetContentFooter, { [s._withPreviews]: activeStepConfig.withAssetsPreviews })}>
+        <div
+          className={cn(
+            s.widgetContentFooter,
+            { [s._withPreviews]: activeStepConfig.withAssetsPreviews },
+          )}
+        >
           <div className={s.widgetContentFooterInner}>
             {renderFooterLeftSection()}
-            {(activeStepConfig.withPricingSubsteps && !isEditingAsset) && (
+            {(activeStepConfig.withPricingSubsteps
+              && pricedAssets.length > 1
+              && !isEditingAsset) && (
               <div className={s.widgetContentFooterSubsteps}>
-                {activePricingSubstepIndex + 1} of {selectedAssets.length}
+                {activePricingSubstepIndex + 1} of {pricedAssets.length}
               </div>
             )}
             <button
