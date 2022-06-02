@@ -54,6 +54,19 @@ const ListingFlow = ({
         });
         setPricedAssets(initialPricedAssets);
       },
+      componentRenderer: () => {
+        return (
+          <AssetsList
+            userAddress={userAddress}
+            chainId={chainId}
+            selectedIds={selectedAssets.map((a) => a.id)}
+            isCompact
+            assetsPerRow={3}
+            maxSelectableAssets={maxSelectableAssets}
+            onSelect={handleAssetsSelect}
+          />
+        );
+      },
     },
     {
       key: 'pricing',
@@ -65,7 +78,7 @@ const ListingFlow = ({
       withPricingSubsteps: true,
       validationCheck: () => {
         const activePricedAsset = pricedAssets[activePricingSubstepIndex];
-        return !!activePricedAsset.amount.length;
+        return activePricedAsset.amount.length && activePricedAsset.selectedMarketplaces.length;
       },
       onConfirm: () => {
         if (activePricingSubstepIndex === pricedAssets.length - 1) {
@@ -73,6 +86,15 @@ const ListingFlow = ({
         }
 
         setActivePricingSubstepIndex(activePricingSubstepIndex + 1);
+      },
+      componentRenderer: () => {
+        return (
+          <AssetPricing
+            asset={pricedAssets[activePricingSubstepIndex]}
+            chainId={chainId}
+            onChange={handlePricedAssetChange}
+          />
+        );
       },
     },
     {
@@ -90,6 +112,9 @@ const ListingFlow = ({
 
         setActiveStepIndex(activeStepIndex + 1);
       },
+      componentRenderer: () => {
+        return 'Confirmation';
+      },
     },
     {
       key: 'status',
@@ -99,6 +124,9 @@ const ListingFlow = ({
       validationCheck: () => true,
       onConfirm: () => {
         onClose();
+      },
+      componentRenderer: () => {
+        return 'Statuses';
       },
     },
   ];
@@ -155,35 +183,6 @@ const ListingFlow = ({
       return activeStepConfig.intermediateConfirmLabel;
     }
     return activeStepConfig.confirmLabel;
-  };
-
-  const renderMainContent = () => {
-    if (activeStepConfig.key === 'pricing') {
-      return (
-        <AssetPricing
-          asset={pricedAssets[activePricingSubstepIndex]}
-          chainId={chainId}
-          onChange={handlePricedAssetChange}
-        />
-      );
-    }
-    if (activeStepConfig.key === 'confirmation') {
-      return 'Confirmation';
-    }
-    if (activeStepConfig.key === 'status') {
-      return 'Orders Status Screen';
-    }
-    return (
-      <AssetsList
-        userAddress={userAddress}
-        chainId={chainId}
-        selectedIds={selectedAssets.map((a) => a.id)}
-        isCompact
-        assetsPerRow={3}
-        maxSelectableAssets={maxSelectableAssets}
-        onSelect={handleAssetsSelect}
-      />
-    );
   };
 
   const renderFooterLeftSection = () => {
@@ -252,7 +251,7 @@ const ListingFlow = ({
       </div>
       <div className={cn(s.widgetContent, s._listingFlow)}>
         <div className={s.widgetContentInner}>
-          {renderMainContent()}
+          {activeStepConfig.componentRenderer()}
         </div>
         <div className={cn(s.widgetContentFooter, { [s._withPreviews]: activeStepConfig.withAssetsPreviews })}>
           <div className={s.widgetContentFooterInner}>
