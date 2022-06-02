@@ -9,7 +9,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/widget" element={<WidgetDemo />} />
+          <Route path="/" element={<WidgetDemo />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
