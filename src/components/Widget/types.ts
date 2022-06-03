@@ -1,6 +1,7 @@
+import { MarketplaceName } from '@gomuweb3/sdk/lib/types';
 import { SupportedTokenType } from 'src/typings';
 
-export type MarketplaceName = 'opensea' | 'trader';
+export { MarketplaceName };
 
 export interface MarketplaceConfig {
   key: MarketplaceName;

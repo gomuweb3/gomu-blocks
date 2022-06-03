@@ -46,7 +46,7 @@ const AssetPricing = ({
           {img && <img src={img} alt={name} />}
         </div>
         <div className={s.pricingAssetInfo}>
-          <p title={name}>{name}</p>
+          {name && <p title={name}>{name}</p>}
           <span title={tokenId}>#{tokenId}</span>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers';
+import { BigNumber } from 'bignumber.js'
 import { Web3Provider } from '@ethersproject/providers';
 import { NftAsset } from 'src/typings';
 
@@ -49,8 +49,15 @@ export const parseAssetId = (id: string) => {
 };
 
 export const toBaseUnitAmount = (value: number | string, decimals = 0) => {
-  const amount = BigNumber.from(value);
-  const unit = BigNumber.from(10).pow(decimals);
-  const baseUnitAmount = amount.mul(unit);
+  const amount = new BigNumber(value);
+  const unit = new BigNumber(10).pow(decimals);
+  const baseUnitAmount = amount.times(unit);
   return String(baseUnitAmount);
+};
+
+export const toUnitAmount = (value: number | string, decimals = 0) => {
+  const amount = new BigNumber(value);
+  const aUnit = new BigNumber(10).pow(decimals);
+  const unit = amount.div(aUnit);
+  return String(unit.toNumber());
 };

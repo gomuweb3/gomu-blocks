@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import cn from 'classnames';
 import { AddressBox } from 'src/components';
-import { useGomuSdk } from 'src/hooks';
 import { rangeFromZero, parseAssetId, toBaseUnitAmount } from 'src/utils';
 import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRightIcon } from 'src/assets/svg';
 import AssetsList from './AssetsList';
 import AssetPricing from './AssetPricing';
 import AssetsConfirmation from './AssetsConfirmation';
 import { MARKETPLACES } from './constants';
-import { PrimitiveAsset, PricedAsset, TokenInfo } from './types';
+import { WidgetContext } from './context';
+import { PrimitiveAsset, PricedAsset } from './types';
 import s from './styles.module.scss';
 
 const ICONS_MAPPING: Record<string, any> = {
@@ -19,16 +19,8 @@ const ICONS_MAPPING: Record<string, any> = {
 };
 
 const ListingFlow = ({
-  userAddress,
-  chainId,
-  erc20Tokens,
-  maxSelectableAssets = 4,
   onClose,
 }: {
-  userAddress: string;
-  chainId: number;
-  erc20Tokens: TokenInfo[];
-  maxSelectableAssets?: number;
   onClose: () => void;
 }) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -38,7 +30,7 @@ const ListingFlow = ({
   const [isEditingAsset, setIsEditingAsset] = useState(false);
   const [isListingOrders, setIsListingOrders] = useState(false);
   const [isFinishedListing, setIsFinishedListing] = useState(false);
-  const gomuSdk = useGomuSdk(chainId, userAddress);
+  const { userAddress, chainId, gomuSdk, erc20Tokens, maxSelectableAssets } = useContext(WidgetContext)!;
 
   const listOrders = async () => {
     await Promise.all(pricedAssets.map(async (asset) => {

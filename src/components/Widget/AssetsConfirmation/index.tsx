@@ -14,7 +14,6 @@ const AssetsConfirmation = ({
   onRemoveAsset?: (id: string) => void;
   onEditAsset?: (id: string) => void;
 }) => {
-  console.log(assets);
   return (
     <div className={s.confirmation}>
       {assets.map(({ id, img, name, amount, paymentTokenAddress, selectedMarketplaces }) => {

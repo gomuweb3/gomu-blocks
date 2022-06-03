@@ -1,4 +1,4 @@
-import { TokenInfo, MarketplaceConfig } from './types';
+import { TokenInfo, MarketplaceConfig, MarketplaceName } from './types';
 
 export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   1: [
@@ -45,12 +45,12 @@ export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
 
 export const MARKETPLACES: MarketplaceConfig[] = [
   {
-    key: 'opensea',
+    key: MarketplaceName.Opensea,
     label: 'OpenSea',
     imgUrl: 'https://i.imgur.com/5RxA58Z.png',
   },
   {
-    key: 'trader',
+    key: MarketplaceName.Trader,
     label: '0x Protocol',
     imgUrl: 'https://i.imgur.com/IHcxsAB.png',
   },
