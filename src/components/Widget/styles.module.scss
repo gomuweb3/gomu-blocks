@@ -217,7 +217,7 @@
     &Inner {
       overflow-y: auto;
       position: relative;
-      max-height: 480px;
+      height: 100%;
       padding: 0 var(--pad-x) 20px;
     }
 
