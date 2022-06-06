@@ -1,6 +1,6 @@
 import { SupportedTokenType, NftAssetOriginal, NftAsset } from 'src/typings';
 
-const SUPPORTED_TOKENS_TYPES: SupportedTokenType[] = [
+export const SUPPORTED_TOKENS_TYPES: SupportedTokenType[] = [
   'ERC20',
   'ERC721',
   'ERC1155',
@@ -25,6 +25,7 @@ const nftItemFragment = `
   tokenId
   contract {
     standard
+    name
   }
   metadata {
     name
@@ -37,7 +38,7 @@ const nftItemFragment = `
 `;
 
 const transformNftAssetData = ({ contractAddress, contract, ...rest }: NftAssetOriginal): NftAsset => {
-  return { ...rest, tokenAddress: contractAddress, type: contract.standard };
+  return { ...rest, tokenAddress: contractAddress, type: contract.standard, name: contract.name };
 };
 
 const transformNftAssets = (nfts: NftAssetOriginal[], includeNonStandardTokenTypes = false) => {

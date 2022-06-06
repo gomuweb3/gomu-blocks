@@ -2,8 +2,9 @@ import { useState, useContext } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { rangeFromZero } from 'src/utils';
+import { MARKETPLACES } from '../constants';
 import { WidgetContext } from '../context';
-import renderOrder from './Order';
+import Order, { getNormalizedOrder } from './Order';
 import orderS from './styles.module.scss';
 import s from '../styles.module.scss';
 
@@ -12,8 +13,10 @@ const OrdersList = ({
 }: {
   heading: string;
 }) => {
-  const [isEditingOrders, setIsEditingOrders] = useState(false);
-  const [selectedOrdersIds, setSelectedOrdersIds] = useState<string[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [cancelledIds, setCancelledIds] = useState<string[]>([]);
   const { userAddress, chainId, gomuSdk } = useContext(WidgetContext)!;
 
   const { data: ordersData, isLoading: ordersLoading } = useQuery(
@@ -22,12 +25,49 @@ const OrdersList = ({
     { enabled: !!userAddress },
   );
 
+  const handleSelectOrder = (id: string) => {
+    const newIds = selectedIds.includes(id)
+      ? selectedIds.filter((_id) => _id !== id)
+      : selectedIds.concat(id);
+
+    setSelectedIds(newIds);
+  };
+
+  const handleCancelOrders = async () => {
+    setIsCancelling(true);
+    try {
+      await Promise.all(selectedIds.map(async (id) => {
+        const [marketplaceName, mpId] = id.split('__');
+        console.log(marketplaceName);
+        const mpConfig = MARKETPLACES.find((config) => config.key === marketplaceName);
+        console.log(mpConfig);
+        const order = mpConfig?.getOrderById(ordersData!.orders, mpId);
+        if (order) {
+          try {
+            await gomuSdk.cancelOrder(order);
+            setCancelledIds((ids) => ids.concat(id));
+          } catch (e) {
+            //
+          }
+        }
+      }));
+    } catch (e) {
+      //
+    }
+
+    setSelectedIds([]);
+    setIsCancelling(false);
+    setIsEditing(false);
+  };
+
   const renderOrders = () => {
     if (ordersLoading) {
       return rangeFromZero(6).map((index) => {
         return (
           <div key={index} className={cn(orderS.order, 'g-processing')}>
-            <div className={orderS.orderImg} />
+            <div className={orderS.orderInner}>
+              <div className={orderS.orderImg} />
+            </div>
           </div>
         );
       });
@@ -37,19 +77,38 @@ const OrdersList = ({
       return <p className={orderS.noOrders}>No Orders Found</p>;
     }
 
-    return ordersData.orders.map(renderOrder);
+    return ordersData.orders.map((order) => {
+      const normalizedOrder = getNormalizedOrder(order);
+
+      if (!normalizedOrder) {
+        return null;
+      }
+
+      return (
+        <Order
+          key={normalizedOrder.id}
+          order={normalizedOrder}
+          originalOrder={order}
+          selectedIds={selectedIds}
+          cancelledIds={cancelledIds}
+          isEditing={isEditing}
+          isCancelling={isCancelling}
+          onSelect={handleSelectOrder}
+        />
+      );
+    });
   };
 
   return (
-    <div className={s.widgetContent}>
+    <div className={cn(s.widgetContent, { [s._nonInteractive]: isCancelling })}>
       <div className={s.widgetContentHeader}>
         <h3 className={s.widgetHeading}>
           {heading}
         </h3>
-        {!isEditingOrders && (
+        {!isEditing && (
           <button
             type="button"
-            onClick={() => setIsEditingOrders(true)}
+            onClick={() => setIsEditing(true)}
           >
             Edit
           </button>
@@ -64,22 +123,21 @@ const OrdersList = ({
             type="button"
             className={s._borderStyle}
             onClick={() => {
-              setIsEditingOrders(false);
-              setSelectedOrdersIds([]);
+              setIsEditing(false);
+              setSelectedIds([]);
             }}
           >
             Back
           </button>
-          {selectedOrdersIds.length && (
+          {selectedIds.length && (
             <button
               type="button"
-              onClick={() => {
-                // TODO cancel orders
-              }}
+              onClick={handleCancelOrders}
             >
-              Cancel
-              {selectedOrdersIds.length ? ` ${selectedOrdersIds.length} ` : ''}
-              Order{selectedOrdersIds.length > 1 ? 's' : ''}
+              Cancel{isCancelling ? 'ling' : ''}
+              {selectedIds.length ? ` ${selectedIds.length} ` : ''}
+              Order{selectedIds.length > 1 ? 's' : ''}
+              {isCancelling ? '...' : ''}
             </button>
           )}
         </div>

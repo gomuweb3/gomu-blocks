@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
-import { getWalletAssets } from 'src/api';
+import { getWalletAssets, SUPPORTED_TOKENS_TYPES } from 'src/api';
 import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
 import { NftAsset } from 'src/typings';
 import { PrimitiveAsset } from '../types';
@@ -30,16 +30,15 @@ const AssetsList = ({
 
   const { data: walletAssets, isLoading: assetsLoading } = useQuery(
     ['walletAssets', userAddress, chainId],
-    () => getWalletAssets({ address: userAddress }),
+    () => getWalletAssets({ address: userAddress, includeNonStandardTokenTypes: true }),
     { enabled: !!userAddress },
   );
 
   const convertToPrimitiveAsset = (asset: NftAsset) => {
     const id = getAssetId(asset);
     const img = getImgFromAsset(asset);
-    const { name } = asset.metadata || {};
 
-    return { id, type: asset.type, img, name } as PrimitiveAsset;
+    return { id, type: asset.type, name: asset.name, img } as PrimitiveAsset;
   };
 
   useEffect(() => {
@@ -96,15 +95,21 @@ const AssetsList = ({
             const id = getAssetId(asset);
             const img = getImgFromAsset(asset);
             const tokenId = `#${asset.tokenId}`;
+            const typeIsSupported = SUPPORTED_TOKENS_TYPES.includes(asset.type);
+            const isDisabled = !isStatic && !typeIsSupported;
 
             return (
               <div
                 key={id}
                 className={cn(
                   s.assetsItem,
-                  { [s._selected]: !!selectedAssets.find((a) => a.id === id) },
+                  {
+                    [s._selected]: !!selectedAssets.find((a) => a.id === id),
+                    [s._disabled]: isDisabled,
+                  },
                 )}
-                onClick={() => handleAssetSelect(asset)}
+                title={isDisabled ? 'Trading for this asset type is not supported' : undefined}
+                onClick={() => typeIsSupported && handleAssetSelect(asset)}
               >
                 <div className={s.assetsItemImg}>
                   {img ? <img src={img} alt="" /> : <div />}

@@ -60,7 +60,7 @@ const AssetPricing = ({
           onChange={(e) => handleChange({ amount: e.target.value })}
         />
         <Dropdown
-          items={erc20Tokens.map(({ address, symbol }) => ({ id: address, label: symbol }))}
+          items={erc20Tokens.filter((t) => !t.notSelectable).map(({ address, symbol }) => ({ id: address, label: symbol }))}
           isSelectDropdown
           selectedId={paymentTokenAddress}
           rightAligned
@@ -78,6 +78,7 @@ const AssetPricing = ({
               key={key}
               name={key}
               checked={isSelected}
+              className={s.pricingCheckbox}
               onChange={() => handleMarketplaceSelect(key, !isSelected)}
             >
               <img src={imgUrl} alt={label} />

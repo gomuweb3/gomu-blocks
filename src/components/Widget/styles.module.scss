@@ -83,6 +83,10 @@
       --addressbox-text-color: #111111;
       --addressbox-border-color: #D2D2D2;
       --addressbox-bg-color: transparent;
+
+      &Back {
+        cursor: pointer;
+      }
     }
 
     &Text {
@@ -153,8 +157,11 @@
       display: flex;
       justify-content: center;
       width: calc(100% / var(--nav-num-of-items));
-      padding: 4px 0;
+      height: 40px;
+      padding: 10px 0 6px;
       font-size: 16px;
+      line-height: 24px;
+      font-weight: 500;
       color: #111111;
       cursor: pointer;
 
@@ -193,6 +200,10 @@
       padding-top: 48px;
     }
 
+    &._nonInteractive {
+      pointer-events: none;
+    }
+
     &Header {
       position: relative;
       display: flex;
@@ -217,6 +228,7 @@
       width: 100%;
       height: var(--footer-h);
       padding: 20px 0;
+      background: #fff;
       will-change: background-color;
       transition: background-color 0.3s;
       border-bottom-left-radius: var(--widget-br);

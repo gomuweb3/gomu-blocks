@@ -1609,10 +1609,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@gomuweb3/sdk@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@gomuweb3/sdk/-/sdk-0.1.1.tgz#70e4f735a3f2fac6ae6279324940bc5b07e730f9"
-  integrity sha512-HBi7zTLwMZ5EPl4HYY3tI4Ai3ezWT944D1PDK50//CRHwMj0/wKlJ444UW9M96UpCszVsEA9t5WW3ixKY5SruA==
+"@gomuweb3/sdk@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@gomuweb3/sdk/-/sdk-0.1.2.tgz#5ee1fe2673f71b4a08211fa8cba2802602863679"
+  integrity sha512-tOrlhORiLOHc8w2ss5TOfKwXF8qgxJWNabi8+rsXqUp328uTk4ZMD3ed+2stBpefdytNCFpYJI0bNYIHX+2Q0A==
   dependencies:
     "@ethersproject/abstract-signer" "^5.6.1"
     "@ethersproject/bignumber" "^5.6.1"
