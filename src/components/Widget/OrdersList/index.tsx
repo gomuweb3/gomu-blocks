@@ -119,16 +119,18 @@ const OrdersList = ({
       </div>
       <div className={s.widgetContentFooter}>
         <div className={s.widgetContentFooterInner}>
-          <button
-            type="button"
-            className={s._borderStyle}
-            onClick={() => {
-              setIsEditing(false);
-              setSelectedIds([]);
-            }}
-          >
-            Back
-          </button>
+          {isEditing && (
+            <button
+              type="button"
+              className={s._borderStyle}
+              onClick={() => {
+                setIsEditing(false);
+                setSelectedIds([]);
+              }}
+            >
+              Back
+            </button>
+          )}
           {selectedIds.length && (
             <button
               type="button"
