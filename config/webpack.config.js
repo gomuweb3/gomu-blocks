@@ -98,14 +98,27 @@ module.exports = function (webpackEnv) {
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
-      isEnvDevelopment && require.resolve('style-loader'),
-      isEnvProduction && {
-        loader: MiniCssExtractPlugin.loader,
-        // css is located in `static/css`, use '../../' to locate index.html folder
-        // in production `paths.publicUrlOrPath` can be a relative path
-        options: paths.publicUrlOrPath.startsWith('.')
-          ? { publicPath: '../../' }
-          : {},
+      {
+        loader: require.resolve("style-loader"),
+        options: {
+          insert: function (element) {
+            const host = document.querySelector("#gomu-widget-embed-host");
+            const shadowRoot = host && host.shadowRoot;
+            console.log({ shadowRoot });
+
+            let styleSlot = shadowRoot
+              ? shadowRoot.querySelector("#gomu-widget-style-slot")
+              : document.head;
+
+            if (!styleSlot) {
+              styleSlot = document.createElement("section");
+              styleSlot.setAttribute("id", "gomu-widget-style-slot");
+              shadowRoot.appendChild(styleSlot);
+            }
+
+            styleSlot.appendChild(element);
+          },
+        },
       },
       {
         loader: require.resolve("css-loader"),
