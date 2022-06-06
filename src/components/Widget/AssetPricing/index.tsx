@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { Dropdown } from 'src/components';
 import { parseAssetId } from 'src/utils';
 import Checkbox from '../Checkbox';
@@ -16,8 +17,13 @@ const AssetPricing = ({
   onChange: (updatedAsset: PricedAsset) => void;
   onConfirm: () => void;
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { id, name, img, amount, paymentTokenAddress, selectedMarketplaces } = asset;
   const { tokenId } = parseAssetId(id);
+
+  useEffect(() => {
+      inputRef.current?.focus();
+  }, []);
 
   const handleChange = (changes: Partial<PricedAsset>) => {
     onChange({
@@ -56,6 +62,7 @@ const AssetPricing = ({
           type="text"
           className={s.pricingTokenInput}
           placeholder="0.1"
+          ref={inputRef}
           value={amount}
           onChange={(e) => handleChange({ amount: e.target.value })}
         />
