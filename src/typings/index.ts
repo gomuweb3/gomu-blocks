@@ -14,6 +14,7 @@ export interface NftAssetOriginal {
   tokenId: string;
   contract: {
     standard: SupportedTokenType;
+    name: string;
   }
   metadata?: NftAssetMetadata;
 }
@@ -22,5 +23,6 @@ export interface NftAsset {
   tokenAddress: string;
   tokenId: string;
   type: SupportedTokenType;
+  name: string;
   metadata?: NftAssetMetadata;
 }

@@ -8,7 +8,7 @@ import AssetPricing from './AssetPricing';
 import AssetsConfirmation from './AssetsConfirmation';
 import { MARKETPLACES } from './constants';
 import { WidgetContext } from './context';
-import { PrimitiveAsset, PricedAsset } from './types';
+import { PrimitiveAsset, PricedAsset, GomuOrder, OrderError } from './types';
 import s from './styles.module.scss';
 
 const ICONS_MAPPING: Record<string, any> = {
@@ -38,7 +38,7 @@ const ListingFlow = ({
       const { tokenAddress: contractAddress, tokenId } = parseAssetId(id);
       const { decimals } = erc20Tokens.find((t) => t.address === paymentTokenAddress) || {};
 
-      let orders: any[] = [];
+      let orders: Array<GomuOrder | OrderError> = [];
 
       try {
         orders = await gomuSdk.makeSellOrder({
@@ -51,18 +51,22 @@ const ListingFlow = ({
           marketplaces: selectedMarketplaces,
         });
       } catch (e) {
-        console.error(e);
+        orders = selectedMarketplaces.map((mp) => {
+          return {
+            marketplaceName: mp,
+            error: 'Something went wrong.',
+          };
+        });
       }
 
       const updatedAsset = { ...asset, orders };
-      const updatedAssets = pricedAssets.map((a) => {
+
+      setPricedAssets((assets) => assets.map((a) => {
         if (a.id === id) {
           return updatedAsset;
         }
         return a;
-      });
-
-      setPricedAssets(updatedAssets);
+      }));
     }));
 
     setIsListingOrders(false);
@@ -185,6 +189,7 @@ const ListingFlow = ({
           <AssetsConfirmation
             assets={pricedAssets}
             erc20Tokens={erc20Tokens}
+            isListingOrders={isListingOrders}
           />
         );
       },
@@ -296,7 +301,7 @@ const ListingFlow = ({
     <>
       <div className={cn(s.widgetHeader, s._withSteps)}>
         <div className={s.widgetHeaderTop}>
-          <ArrowLeftIcon onClick={() => onClose()} />
+          <ArrowLeftIcon className={s.widgetHeaderTopBack} onClick={() => onClose()} />
           <AddressBox address={userAddress} />
         </div>
         <div className={s.widgetHeaderText}>

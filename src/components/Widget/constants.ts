@@ -1,4 +1,4 @@
-import { TokenInfo, MarketplaceConfig, MarketplaceName } from './types';
+import { TokenInfo, MarketplaceConfig, MarketplaceName, GomuOrder, OpenseaOrder, TraderOrder } from './types';
 
 export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   1: [
@@ -32,6 +32,13 @@ export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
       decimals: 18,
       imgUrl: 'https://lh3.googleusercontent.com/ExQJMS8JzvhjJl0UlQWsBH3AiQvVjMMmP7-Pb4ZhSVQbWD-X9zaxRD5r7wrKHJk4tpwtUfemmpeEm7NJekun0U9b',
     },
+    {
+      symbol: 'ETH',
+      address: '0x0000000000000000000000000000000000000000',
+      decimals: 18,
+      imgUrl: 'https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg',
+      notSelectable: true,
+    },
   ],
   4: [
     {
@@ -48,10 +55,23 @@ export const MARKETPLACES: MarketplaceConfig[] = [
     key: MarketplaceName.Opensea,
     label: 'OpenSea',
     imgUrl: 'https://i.imgur.com/5RxA58Z.png',
+    linkBuilder: (order?: GomuOrder) => {
+      if (!order) return '';
+      const { marketplaceOrder } = order as OpenseaOrder;
+      if (!marketplaceOrder) return '';
+      const { tokenAddress, tokenId } = marketplaceOrder.asset!;
+      return `https://opensea.io/assets/ethereum/${tokenAddress}/${tokenId}`;
+    },
+    getOrderById: (orders, id) => {
+      return (orders as OpenseaOrder[]).find((o) => o.marketplaceName === 'opensea' && o.marketplaceOrder.hash === id);
+    },
   },
   {
     key: MarketplaceName.Trader,
     label: '0x Protocol',
     imgUrl: 'https://i.imgur.com/IHcxsAB.png',
+    getOrderById: (orders, id) => {
+      return (orders as TraderOrder[]).find((o) => o.marketplaceName === 'trader' && o.marketplaceOrder.order.nonce === id);
+    },
   },
 ];

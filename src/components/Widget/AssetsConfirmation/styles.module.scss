@@ -85,16 +85,57 @@
   &Marketplace {
     position: relative;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    column-gap: 18px;
 
     &:not(:last-child) {
       margin-bottom: 12px;
     }
 
-    img {
-      width: 30px;
-      height: 30px;
+    &Info {
+      position: relative;
+      display: flex;
+      align-items: center;
+      column-gap: 18px;
+
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &Loader {
+      width: 20px;
+      height: 20px;
+    }
+
+    &Status {
+      display: flex;
+      align-items: center;
+      column-gap: 9px;
+      font-size: 12px;
+      font-weight: 500;
+
+      svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      &._error {
+        color: #FF3562;
+
+        svg {
+          fill: #FF3562;
+        }
+      }
+
+      &._success {
+        color: #6DCC76;
+
+        svg {
+          fill: #6DCC76;
+        }
+      }
     }
   }
 

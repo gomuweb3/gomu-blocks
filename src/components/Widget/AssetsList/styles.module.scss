@@ -59,6 +59,11 @@
       }
     }
 
+    &._disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     &Img {
       position: relative;
       padding-bottom: 100%;

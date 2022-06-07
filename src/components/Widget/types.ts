@@ -1,12 +1,20 @@
-import { MarketplaceName } from '@gomuweb3/sdk/lib/types';
+import { MarketplaceName, Order as GomuOrder, TraderOrder, OpenseaOrder } from '@gomuweb3/sdk/lib/types';
 import { SupportedTokenType } from 'src/typings';
 
 export { MarketplaceName };
+export type { GomuOrder, TraderOrder, OpenseaOrder };
+
+export interface OrderError {
+  marketplaceName: MarketplaceName;
+  error: string;
+}
 
 export interface MarketplaceConfig {
   key: MarketplaceName;
   label: string;
   imgUrl: string;
+  linkBuilder?: (order?: GomuOrder) => string;
+  getOrderById: (orders: GomuOrder[], id: string) => GomuOrder | undefined;
 }
 
 export interface PrimitiveAsset {
@@ -20,7 +28,7 @@ export interface PricedAsset extends PrimitiveAsset {
   amount: string;
   paymentTokenAddress: string;
   selectedMarketplaces: MarketplaceName[];
-  orders: any[];
+  orders: Array<GomuOrder | OrderError>;
 }
 
 export interface TokenInfo {
@@ -28,4 +36,5 @@ export interface TokenInfo {
   address: string;
   decimals: number;
   imgUrl: string;
+  notSelectable?: boolean;
 }
