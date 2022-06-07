@@ -104,7 +104,6 @@ module.exports = function (webpackEnv) {
           insert: function (element) {
             const host = document.querySelector("#gomu-widget-embed-host");
             const shadowRoot = host && host.shadowRoot;
-            console.log({ shadowRoot });
 
             let styleSlot = shadowRoot
               ? shadowRoot.querySelector("#gomu-widget-style-slot")

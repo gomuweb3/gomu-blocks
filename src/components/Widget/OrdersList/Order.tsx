@@ -6,6 +6,7 @@ import { getNftsByToken } from 'src/api';
 import { getImgFromAsset, toUnitAmount } from 'src/utils';
 import { ExternalLinkIcon, Loader } from 'src/assets/svg';
 import Checkbox from '../Checkbox';
+import Erc20Amount from '../Erc20Amount';
 import { MARKETPLACES } from '../constants';
 import { WidgetContext } from '../context';
 import { GomuOrder, TraderOrder, OpenseaOrder } from '../types';
@@ -100,8 +101,6 @@ const Order = ({
   const erc20TokenInfo = erc20Tokens.find((t) => t.address === erc20Asset.contractAddress);
   const marketplaceInfo = MARKETPLACES.find((mp) => mp.key === originalOrder.marketplaceName);
   const formattedAmount = toUnitAmount(erc20Asset.amount, erc20TokenInfo?.decimals);
-  const amountLimit = 10;
-  const slicedAmount = formattedAmount.slice(0, amountLimit);
   const link = marketplaceInfo?.linkBuilder ? marketplaceInfo.linkBuilder(originalOrder) : '';
   const isSelected = selectedIds.includes(id);
   const isCancelled = cancelledIds.includes(id);
@@ -132,13 +131,11 @@ const Order = ({
         <div className={s.orderInfo}>
           {name && <p title={name}>{name}</p>}
           <p title={asset.tokenId}>{asset.tokenId}</p>
-          <p
+          <Erc20Amount
+            amount={formattedAmount}
+            erc20Token={erc20TokenInfo}
             className={s.orderErc20}
-            title={`${formattedAmount} ${erc20TokenInfo?.symbol}`}
-          >
-            {`${slicedAmount}${formattedAmount.length > amountLimit ? '...' : ''}`}
-            {erc20TokenInfo && <img src={erc20TokenInfo.imgUrl} alt={erc20TokenInfo.symbol} />}
-          </p>
+          />
           {marketplaceInfo && (
             <p className={s.orderSecondary}>
               {`${isCancelled ? 'Cancelled on ' : ''}${marketplaceInfo.label}`}

@@ -81,6 +81,13 @@
       p {
         flex-grow: 1;
         @include overflowedText;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        img {
+          height: 16px;
+        }
 
         span {
           color: #486191;
@@ -186,6 +193,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    column-gap: 8px;
     height: var(--item-h);
     padding: 0 16px;
     cursor: pointer;
@@ -198,6 +206,10 @@
     &:last-child {
       border-bottom-left-radius: var(--border-radius);
       border-bottom-right-radius: var(--border-radius);
+    }
+
+    img {
+      height: 16px;
     }
 
     p {

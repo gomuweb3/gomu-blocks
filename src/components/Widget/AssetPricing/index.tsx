@@ -45,6 +45,10 @@ const AssetPricing = ({
     onConfirm();
   };
 
+  const erc20DropdownItems = erc20Tokens
+    .filter((t) => !t.notSelectable)
+    .map(({ address, symbol, imgUrl }) => ({ id: address, label: symbol, imgUrl }));
+
   return (
     <form className={s.pricing} onSubmit={handleConfirm}>
       <div className={s.pricingAsset}>
@@ -67,7 +71,7 @@ const AssetPricing = ({
           onChange={(e) => handleChange({ amount: e.target.value })}
         />
         <Dropdown
-          items={erc20Tokens.filter((t) => !t.notSelectable).map(({ address, symbol }) => ({ id: address, label: symbol }))}
+          items={erc20DropdownItems}
           isSelectDropdown
           selectedId={paymentTokenAddress}
           rightAligned

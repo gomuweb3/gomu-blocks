@@ -6,6 +6,7 @@ import s from './styles.module.scss';
 export interface DropdownItem {
   id?: string;
   label: string;
+  imgUrl?: string;
   onClick?: () => void;
 }
 
@@ -76,7 +77,12 @@ const Dropdown: FC<IProps> = ({
   const renderSelectLabel = () => {
     const selectedItem = items?.find((item) => item.id === selectedId);
     if (selectedId && selectedItem) {
-      return selectedItem.label;
+      return (
+        <>
+          {selectedItem.imgUrl && <img src={selectedItem.imgUrl} alt={selectedItem.label} />}
+          {selectedItem.label}
+        </>
+      );
     }
     return <span>{togglerLabel}</span>;
   };
@@ -103,13 +109,14 @@ const Dropdown: FC<IProps> = ({
       </div>
       <div className={s.dropdownItems}>
         {isOpen && items?.map((item) => {
-          const { id, label: itemLabel } = item;
+          const { id, label: itemLabel, imgUrl } = item;
           return (
             <div
               key={id || itemLabel}
               className={cn(s.dropdownItem, { [s._selected]: id === selectedId })}
               onClick={() => handleSelect(item)}
             >
+              {imgUrl && <img src={imgUrl} alt={label} />}
               <p>{itemLabel}</p>
             </div>
           );

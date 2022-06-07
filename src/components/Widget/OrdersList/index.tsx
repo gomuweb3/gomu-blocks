@@ -38,9 +38,7 @@ const OrdersList = ({
     try {
       await Promise.all(selectedIds.map(async (id) => {
         const [marketplaceName, mpId] = id.split('__');
-        console.log(marketplaceName);
         const mpConfig = MARKETPLACES.find((config) => config.key === marketplaceName);
-        console.log(mpConfig);
         const order = mpConfig?.getOrderById(ordersData!.orders, mpId);
         if (order) {
           try {

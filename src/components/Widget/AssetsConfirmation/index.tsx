@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import { parseAssetId } from 'src/utils';
 import { Loader, ExternalLinkIcon, QuestionIcon } from 'src/assets/svg';
+import Erc20Amount from '../Erc20Amount';
 import { MARKETPLACES } from '../constants';
 import { PricedAsset, TokenInfo, GomuOrder, OrderError } from '../types';
 import s from './styles.module.scss';
@@ -33,15 +34,11 @@ const AssetsConfirmation = ({
               <div className={s.assetInfo}>
                 <p className={s.assetName} title={name}>{name}</p>
                 <p className={s.assetTokenId} title={tokenId}>#{tokenId}</p>
-                <p className={s.assetErc20} title={`${amount} ${erc20Token?.symbol}`}>
-                  {amount}
-                  {erc20Token && (
-                    <img
-                      src={erc20Token.imgUrl || erc20Token.symbol}
-                      alt={erc20Token.symbol}
-                    />
-                  )}
-                </p>
+                <Erc20Amount
+                  amount={amount}
+                  erc20Token={erc20Token}
+                  className={s.assetErc20}
+                />
               </div>
             </div>
             <div className={s.assetFooter}>
