@@ -4,8 +4,9 @@
   padding: 0;
 }
 
-:root {
+:host, :root {
   --purple: #7965D1;
+  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -15,20 +16,6 @@
 }
 ::-webkit-scrollbar-thumb {
   background-color: #7965D1;
-}
-
-body {
-  overflow-x: hidden;
-  min-height: 100vh;
-  font-family: 'Montserrat', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--purple);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  height: 100vh;
 }
 
 button, input, textarea, select {
