@@ -1,4 +1,4 @@
-import { TokenInfo, MarketplaceConfig, MarketplaceName, GomuOrder, OpenseaOrder, TraderOrder } from './types';
+import { TokenInfo, MarketplaceConfig, BreakpointsConfigItem, MarketplaceName, GomuOrder, OpenseaOrder, TraderOrder } from './types';
 
 export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
   1: [
@@ -74,4 +74,26 @@ export const MARKETPLACES: MarketplaceConfig[] = [
       return (orders as TraderOrder[]).find((o) => o.marketplaceName === 'trader' && o.marketplaceOrder.order.nonce === id);
     },
   },
+];
+
+export const BREAKPOINTS_CONFIG: BreakpointsConfigItem[] = [
+  {
+    range: '0-480',
+    assetsPerRow: 2,
+    compactAssetsPerRow: 3,
+    gridGap: '16px 24px',
+    compactGridGap: '12px',
+  },
+  {
+    range: '481-960',
+    assetsPerRow: 3,
+    compactAssetsPerRow: 4,
+    gridGap: '16px 40px',
+    compactGridGap: '16px',
+  },
+  {
+    range: '961',
+    assetsPerRow: 5,
+    gridGap: '16px 40px',
+  }
 ];

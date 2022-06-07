@@ -38,3 +38,11 @@ export interface TokenInfo {
   imgUrl: string;
   notSelectable?: boolean;
 }
+
+export interface BreakpointsConfigItem {
+  range: string;
+  assetsPerRow: number;
+  compactAssetsPerRow?: number;
+  gridGap: string;
+  compactGridGap?: string;
+}

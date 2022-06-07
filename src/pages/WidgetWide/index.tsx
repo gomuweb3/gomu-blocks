@@ -2,7 +2,7 @@ import { ConnectMetamask, Widget } from 'src/components';
 import { useMetamaskNetwork } from 'src/hooks';
 import s from './styles.module.scss';
 
-const WidgetDemo = () => {
+const WidgetWide = () => {
   const { isMMRequired, userAddress, chainId } = useMetamaskNetwork();
 
   if (isMMRequired) {
@@ -16,4 +16,4 @@ const WidgetDemo = () => {
   );
 };
 
-export default WidgetDemo;
+export default WidgetWide;

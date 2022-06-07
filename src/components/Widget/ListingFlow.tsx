@@ -102,7 +102,6 @@ const ListingFlow = ({
             chainId={chainId}
             selectedIds={selectedAssets.map((a) => a.id)}
             isCompact
-            assetsPerRow={3}
             maxSelectableAssets={maxSelectableAssets}
             onSelect={handleAssetsSelect}
           />

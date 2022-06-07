@@ -3,16 +3,15 @@
 .assets {
   $assetsRef: &;
 
-  --items-per-row: 2;
-
   overflow-x: hidden;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(var(--items-per-row), minmax(0, 1fr));
-  gap: 16px 24px;
+  grid-template-columns: repeat(var(--assets-per-row), minmax(0, 1fr));
+  gap: var(--grid-gap);
 
   &._compact {
-    gap: 12px;
+    gap: var(--compact-grid-gap);
+    grid-template-columns: repeat(var(--compact-assets-per-row), minmax(0, 1fr));
   }
 
   @mixin isStatic {

@@ -13,7 +13,6 @@ const AssetsList = ({
   selectedIds,
   isStatic,
   isCompact,
-  assetsPerRow = 2,
   maxSelectableAssets = 4,
   onSelect,
 }: {
@@ -22,7 +21,6 @@ const AssetsList = ({
   selectedIds?: string[];
   isStatic?: boolean;
   isCompact?: boolean;
-  assetsPerRow?: number;
   maxSelectableAssets?: number; // -1 for unlimited
   onSelect?: (assets: PrimitiveAsset[]) => void;
 }) => {
@@ -75,10 +73,7 @@ const AssetsList = ({
   };
 
   return (
-    <div
-      className={cn(s.assets, { [s._static]: isStatic, [s._compact]: isCompact })}
-      style={{ '--items-per-row': assetsPerRow } as any}
-    >
+    <div className={cn(s.assets, { [s._static]: isStatic, [s._compact]: isCompact })}>
       {assetsLoading
         ? rangeFromZero(6).map((index) => {
           return (

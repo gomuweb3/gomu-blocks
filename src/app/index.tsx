@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import WidgetDemo from 'src/pages/WidgetDemo';
+import WidgetMobile from 'src/pages/WidgetMobile';
+import WidgetWide from 'src/pages/WidgetWide';
 
 const queryClient = new QueryClient();
 
@@ -9,7 +10,8 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<WidgetDemo />} />
+          <Route path="/" element={<WidgetMobile />} />
+          <Route path="/widget-wide" element={<WidgetWide />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
