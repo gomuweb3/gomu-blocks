@@ -9,12 +9,27 @@ export interface OrderError {
   error: string;
 }
 
+export interface NormalizedOrder {
+  id: string;
+  asset: {
+    contractAddress: string;
+    tokenId: string;
+    type: string;
+    amount: string;
+  };
+  erc20Asset: {
+    contractAddress: string;
+    amount: string;
+  };
+}
+
 export interface MarketplaceConfig {
   key: MarketplaceName;
   label: string;
   imgUrl: string;
-  linkBuilder?: (order?: GomuOrder) => string;
+  getNormalizedOrder: (order: GomuOrder) => NormalizedOrder;
   getOrderById: (orders: GomuOrder[], id: string) => GomuOrder | undefined;
+  buildExternalLink?: (order?: GomuOrder, chainId?: number) => string;
 }
 
 export interface PrimitiveAsset {

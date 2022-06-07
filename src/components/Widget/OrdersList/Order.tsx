@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
-import { BigNumber } from 'bignumber.js';
 import { getNftsByToken } from 'src/api';
 import { getImgFromAsset, toUnitAmount } from 'src/utils';
 import { ExternalLinkIcon, Loader } from 'src/assets/svg';
@@ -9,61 +8,15 @@ import Checkbox from '../Checkbox';
 import Erc20Amount from '../Erc20Amount';
 import { MARKETPLACES } from '../constants';
 import { WidgetContext } from '../context';
-import { GomuOrder, TraderOrder, OpenseaOrder } from '../types';
+import { GomuOrder, NormalizedOrder } from '../types';
 import s from './styles.module.scss';
 
-interface NormalizedOrder {
-  id: string;
-  asset: {
-    contractAddress: string;
-    tokenId: string;
-    type: string;
-    amount: string;
-  };
-  erc20Asset: {
-    contractAddress: string;
-    amount: string;
-  };
-}
-
-export const getNormalizedOrder = ({
-  marketplaceName,
-  marketplaceOrder,
-}: GomuOrder): NormalizedOrder | null => {
-  switch (marketplaceName) {
-    case 'trader':
-      const order = marketplaceOrder as TraderOrder['marketplaceOrder'];
-      return {
-        id: `trader__${order.order.nonce}`,
-        asset: {
-          contractAddress: order.nftToken,
-          tokenId: order.nftTokenId,
-          type: order.nftType,
-          amount: order.nftTokenAmount,
-        },
-        erc20Asset: {
-          contractAddress: order.erc20Token,
-          amount: order.erc20TokenAmount,
-        },
-      };
-    case 'opensea':
-      const { hash, asset, quantity, paymentToken, basePrice } = marketplaceOrder as OpenseaOrder['marketplaceOrder'];
-      return {
-        id: `opensea__${hash}`,
-        asset: {
-          contractAddress: asset!.tokenAddress,
-          tokenId: asset!.tokenId!,
-          type: asset!.assetContract.schemaName,
-          amount: new BigNumber(quantity).toString(),
-        },
-        erc20Asset: {
-          contractAddress: paymentToken,
-          amount: new BigNumber(basePrice).toString(),
-        },
-      };
-    default:
-      return null;
+export const getNormalizedOrder = (order: GomuOrder) => {
+  const marketplaceConfig = MARKETPLACES.find((mp) => mp.key === order.marketplaceName);
+  if (marketplaceConfig) {
+    return marketplaceConfig.getNormalizedOrder(order);
   }
+  return null;
 };
 
 const Order = ({
@@ -83,7 +36,7 @@ const Order = ({
   isCancelling: boolean;
   onSelect: (id: string) => void;
 }) => {
-  const { erc20Tokens } = useContext(WidgetContext)!;
+  const { erc20Tokens, chainId } = useContext(WidgetContext)!;
 
   const { id, asset, erc20Asset } = order;
 
@@ -101,7 +54,7 @@ const Order = ({
   const erc20TokenInfo = erc20Tokens.find((t) => t.address === erc20Asset.contractAddress);
   const marketplaceInfo = MARKETPLACES.find((mp) => mp.key === originalOrder.marketplaceName);
   const formattedAmount = toUnitAmount(erc20Asset.amount, erc20TokenInfo?.decimals);
-  const link = marketplaceInfo?.linkBuilder ? marketplaceInfo.linkBuilder(originalOrder) : '';
+  const link = marketplaceInfo?.buildExternalLink ? marketplaceInfo.buildExternalLink(originalOrder, chainId) : '';
   const isSelected = selectedIds.includes(id);
   const isCancelled = cancelledIds.includes(id);
 

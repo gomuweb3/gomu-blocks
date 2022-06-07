@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { rangeFromZero } from 'src/utils';
-import { MARKETPLACES } from '../constants';
+import { MARKETPLACES, ORDER_ID_SEPARATOR } from '../constants';
 import { WidgetContext } from '../context';
 import Order, { getNormalizedOrder } from './Order';
 import orderS from './styles.module.scss';
@@ -37,7 +37,7 @@ const OrdersList = ({
     setIsCancelling(true);
     try {
       await Promise.all(selectedIds.map(async (id) => {
-        const [marketplaceName, mpId] = id.split('__');
+        const [marketplaceName, mpId] = id.split(ORDER_ID_SEPARATOR);
         const mpConfig = MARKETPLACES.find((config) => config.key === marketplaceName);
         const order = mpConfig?.getOrderById(ordersData!.orders, mpId);
         if (order) {
@@ -80,6 +80,10 @@ const OrdersList = ({
 
       if (!normalizedOrder) {
         return null;
+      }
+
+      if (order.marketplaceName === 'opensea') {
+        console.log(order.marketplaceOrder);
       }
 
       return (

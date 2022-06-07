@@ -1,8 +1,10 @@
+import { useContext } from 'react';
 import cn from 'classnames';
 import { parseAssetId } from 'src/utils';
 import { Loader, ExternalLinkIcon, QuestionIcon } from 'src/assets/svg';
 import Erc20Amount from '../Erc20Amount';
 import { MARKETPLACES } from '../constants';
+import { WidgetContext } from '../context';
 import { PricedAsset, TokenInfo, GomuOrder, OrderError } from '../types';
 import s from './styles.module.scss';
 
@@ -19,6 +21,8 @@ const AssetsConfirmation = ({
   onRemoveAsset?: (id: string) => void;
   onEditAsset?: (id: string) => void;
 }) => {
+  const { chainId } = useContext(WidgetContext)!;
+
   return (
     <div className={s.confirmation}>
       {assets.map(({ id, img, name, amount, paymentTokenAddress, selectedMarketplaces, orders }) => {
@@ -42,14 +46,14 @@ const AssetsConfirmation = ({
               </div>
             </div>
             <div className={s.assetFooter}>
-              {MARKETPLACES.map(({ key, label, imgUrl, linkBuilder }) => {
+              {MARKETPLACES.map(({ key, label, imgUrl, buildExternalLink }) => {
                 if (!selectedMarketplaces.includes(key)) {
                   return null;
                 }
 
                 const order = orders.find((o) => o.marketplaceName === key);
                 const { error } = order as OrderError || {};
-                const link = linkBuilder ? linkBuilder(order as GomuOrder) : '';
+                const link = buildExternalLink ? buildExternalLink(order as GomuOrder, chainId) : '';
                 const status = (order && error)
                   ? (
                     <p className={cn(s.assetMarketplaceStatus, s._error)} title={error}>
