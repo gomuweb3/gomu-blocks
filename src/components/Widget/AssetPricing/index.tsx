@@ -68,6 +68,11 @@ const AssetPricing = ({
           placeholder="0.1"
           ref={inputRef}
           value={amount}
+          onKeyPress={(e) => {
+            if (!/[0-9]|\./.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
           onChange={(e) => handleChange({ amount: e.target.value })}
         />
         <Dropdown

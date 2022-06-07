@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
-import { getWalletAssets, SUPPORTED_TOKENS_TYPES } from 'src/api';
+import { getWalletAssets, SUPPORTED_NFT_TYPES } from 'src/api';
 import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
 import { NftAsset } from 'src/typings';
 import { PrimitiveAsset } from '../types';
@@ -95,7 +95,7 @@ const AssetsList = ({
             const id = getAssetId(asset);
             const img = getImgFromAsset(asset);
             const tokenId = `#${asset.tokenId}`;
-            const typeIsSupported = SUPPORTED_TOKENS_TYPES.includes(asset.type);
+            const typeIsSupported = (SUPPORTED_NFT_TYPES as string[]).includes(asset.type);
             const isDisabled = !isStatic && !typeIsSupported;
 
             return (

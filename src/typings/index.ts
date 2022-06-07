@@ -1,4 +1,4 @@
-export type SupportedTokenType = 'ERC20' | 'ERC721' | 'ERC1155';
+export type SupportedNftType = 'ERC721' | 'ERC1155';
 
 export interface NftAssetMetadata {
   name: string;
@@ -13,7 +13,7 @@ export interface NftAssetOriginal {
   contractAddress: string;
   tokenId: string;
   contract: {
-    standard: SupportedTokenType;
+    standard: string;
     name: string;
   }
   metadata?: NftAssetMetadata;
@@ -22,7 +22,7 @@ export interface NftAssetOriginal {
 export interface NftAsset {
   tokenAddress: string;
   tokenId: string;
-  type: SupportedTokenType;
+  type: string;
   name: string;
   metadata?: NftAssetMetadata;
 }

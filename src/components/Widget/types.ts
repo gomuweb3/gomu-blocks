@@ -1,5 +1,5 @@
 import { MarketplaceName, Order as GomuOrder, TraderOrder, OpenseaOrder } from '@gomuweb3/sdk/lib/types';
-import { SupportedTokenType } from 'src/typings';
+import { SupportedNftType } from 'src/typings';
 
 export { MarketplaceName };
 export type { GomuOrder, TraderOrder, OpenseaOrder };
@@ -19,7 +19,7 @@ export interface MarketplaceConfig {
 
 export interface PrimitiveAsset {
   id: string;
-  type: SupportedTokenType;
+  type: SupportedNftType;
   name?: string;
   img?: string;
 }
