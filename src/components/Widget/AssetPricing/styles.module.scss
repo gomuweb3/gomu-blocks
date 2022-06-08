@@ -1,11 +1,15 @@
 @import '/src/styles/globals';
 
 .pricing {
+  position: relative;
+  max-width: 572px;
+  margin: 0 auto;
 
   &Asset {
     position: relative;
     display: flex;
     align-items: center;
+
     column-gap: 16px;
     margin-bottom: 16px;
 

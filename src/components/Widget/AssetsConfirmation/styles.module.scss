@@ -63,6 +63,7 @@
 
     p {
       @include overflowedText;
+      max-width: 300px;
 
       &:not(:last-child) {
         margin-bottom: 2px;

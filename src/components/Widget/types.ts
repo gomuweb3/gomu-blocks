@@ -60,4 +60,6 @@ export interface BreakpointsConfigItem {
   compactAssetsPerRow?: number;
   gridGap: string;
   compactGridGap?: string;
+  compactGridAssetFooterHeight?: string;
+  listingHeaderNavSidePad?: string;
 }

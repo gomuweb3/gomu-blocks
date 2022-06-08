@@ -15,6 +15,8 @@ export const getBreakpointsStyles = (config: BreakpointsConfigItem) => {
     '--assets-per-row': config.assetsPerRow,
     '--compact-assets-per-row': config.compactAssetsPerRow || config.assetsPerRow,
     '--grid-gap': config.gridGap,
-    '--compact-grid-gap': config.compactGridGap || config.gridGap
+    '--compact-grid-gap': config.compactGridGap || config.gridGap,
+    '--compact-grid-asset-footer-h': config.compactGridAssetFooterHeight || '44px',
+    '--listing-header-nav-side-pad': config.listingHeaderNavSidePad || '120px',
   } as any;
 };

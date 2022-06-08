@@ -131,7 +131,7 @@
       align-items: center;
       width: 100%;
       height: var(--step-circle-size);
-      padding: 0 28px;
+      padding: 0 var(--listing-header-nav-side-pad, 120px);
     }
 
     &Step {

@@ -122,6 +122,8 @@ export const BREAKPOINTS_CONFIG: BreakpointsConfigItem[] = [
     compactAssetsPerRow: 3,
     gridGap: '16px 24px',
     compactGridGap: '12px',
+    compactGridAssetFooterHeight: '28px',
+    listingHeaderNavSidePad: '28px',
   },
   {
     range: [481, 960],
@@ -129,6 +131,7 @@ export const BREAKPOINTS_CONFIG: BreakpointsConfigItem[] = [
     compactAssetsPerRow: 4,
     gridGap: '16px 40px',
     compactGridGap: '16px',
+    listingHeaderNavSidePad: '56px',
   },
   {
     range: [961, 1400],

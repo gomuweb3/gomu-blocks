@@ -101,7 +101,7 @@
       }
 
       @include isCompact {
-        height: 28px;
+        height: var(--compact-grid-asset-footer-h, 44px);
         font-size: 12px;
       }
     }
