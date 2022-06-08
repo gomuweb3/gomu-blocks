@@ -3,8 +3,8 @@ import { BreakpointsConfigItem } from './types';
 
 export const getBreakpointsConfig = (width: number) => {
   return BREAKPOINTS_CONFIG.find(({ range }) => {
-    const [min, max = Number.POSITIVE_INFINITY] = range.split('-');
-    if (width >= Number(min) && width <= Number(max)) {
+    const [min, max = Number.POSITIVE_INFINITY] = range;
+    if (width >= min && width <= max) {
       return true
     }
   });

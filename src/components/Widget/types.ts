@@ -55,7 +55,7 @@ export interface TokenInfo {
 }
 
 export interface BreakpointsConfigItem {
-  range: string;
+  range: [number, number?];
   assetsPerRow: number;
   compactAssetsPerRow?: number;
   gridGap: string;

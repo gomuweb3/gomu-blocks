@@ -117,22 +117,27 @@ export const MARKETPLACES: MarketplaceConfig[] = [
 
 export const BREAKPOINTS_CONFIG: BreakpointsConfigItem[] = [
   {
-    range: '0-480',
+    range: [0, 480],
     assetsPerRow: 2,
     compactAssetsPerRow: 3,
     gridGap: '16px 24px',
     compactGridGap: '12px',
   },
   {
-    range: '481-960',
+    range: [481, 960],
     assetsPerRow: 3,
     compactAssetsPerRow: 4,
     gridGap: '16px 40px',
     compactGridGap: '16px',
   },
   {
-    range: '961',
+    range: [961, 1400],
     assetsPerRow: 5,
+    gridGap: '16px 40px',
+  },
+  {
+    range: [1401],
+    assetsPerRow: 6,
     gridGap: '16px 40px',
   }
 ];
