@@ -69,7 +69,7 @@ const AssetPricing = ({
           ref={inputRef}
           value={amount}
           onKeyPress={(e) => {
-            if (!/[0-9]|\./.test(e.key)) {
+            if (!/[0-9]|\./.test(e.key) && e.key !== 'Enter') {
               e.preventDefault();
             }
           }}
