@@ -59,18 +59,20 @@ export const useMetamaskNetwork = (props?: UseMetamaskNetworkProps) => {
   }, [isMMRequired]);
 
   useEffect(() => {
-    const provider = new Web3Provider(window.ethereum, 'any');
-    provider.on('network', (newNetwork) => {
-      handleChainChanged(newNetwork.chainId);
-    });
+    if (!isMMRequired) {
+      const provider = new Web3Provider(window.ethereum, 'any');
+      provider.on('network', (newNetwork) => {
+        handleChainChanged(newNetwork.chainId);
+      });
 
-    window.ethereum.on('accountsChanged', handleAccountsChanged);
+      window.ethereum.on('accountsChanged', handleAccountsChanged);
 
-    return () => {
-      provider.off('network');
-      window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      return () => {
+        provider.off('network');
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      };
+    }
+  }, [isMMRequired]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     isMMRequired,

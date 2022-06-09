@@ -7,6 +7,7 @@ export const getBreakpointsConfig = (width: number) => {
     if (width >= min && width <= max) {
       return true
     }
+    return false;
   });
 };
 
