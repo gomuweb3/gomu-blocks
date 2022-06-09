@@ -1,29 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useQuery } from 'react-query';
 import cn from 'classnames';
 import { getWalletAssets, SUPPORTED_NFT_TYPES } from 'src/api';
 import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
 import { NftAsset } from 'src/typings';
+import { WidgetContext } from '../context';
 import { PrimitiveAsset } from '../types';
 import s from './styles.module.scss';
 
 const AssetsList = ({
-  userAddress,
-  chainId,
   selectedIds,
   isStatic,
   isCompact,
   maxSelectableAssets = 4,
   onSelect,
 }: {
-  userAddress: string;
-  chainId: number;
   selectedIds?: string[];
   isStatic?: boolean;
   isCompact?: boolean;
   maxSelectableAssets?: number; // -1 for unlimited
   onSelect?: (assets: PrimitiveAsset[]) => void;
 }) => {
+  const { userAddress, chainId } = useContext(WidgetContext)!;
   const [selectedAssets, setSelectedAssets] = useState<PrimitiveAsset[]>([]);
 
   const { data: walletAssets, isLoading: assetsLoading } = useQuery(

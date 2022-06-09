@@ -25,17 +25,6 @@
   height: 750px;
   background: #fff;
   border-radius: var(--widget-br);
-  // opacity: 0;
-
-  @keyframes appearenceAnimation {
-    to {
-      opacity: 1;
-    }
-  }
-
-  &._resized {
-    // animation: appearenceAnimation 0.3s 0.2s forwards;
-  }
 
   &Heading {
     font-size: 20px;

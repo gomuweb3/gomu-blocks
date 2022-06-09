@@ -1,8 +1,6 @@
-import { useContext } from 'react';
 import cn from 'classnames';
 import { PoweredByLogoPurple } from 'src/assets/svg';
 import AssetsList from './AssetsList';
-import { WidgetContext } from './context';
 import s from './styles.module.scss';
 
 const YourNfts = ({
@@ -12,8 +10,6 @@ const YourNfts = ({
   heading: string;
   onSellClick: () => void;
 }) => {
-  const { userAddress, chainId } = useContext(WidgetContext)!;
-
   return (
     <div className={s.widgetContent}>
       <div className={s.widgetContentHeader}>
@@ -27,8 +23,6 @@ const YourNfts = ({
       </div>
       <div className={s.widgetContentInner}>
         <AssetsList
-          userAddress={userAddress}
-          chainId={chainId}
           isStatic
         />
       </div>

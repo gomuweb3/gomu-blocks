@@ -30,7 +30,7 @@ const ListingFlow = ({
   const [isEditingAsset, setIsEditingAsset] = useState(false);
   const [isListingOrders, setIsListingOrders] = useState(false);
   const [isFinishedListing, setIsFinishedListing] = useState(false);
-  const { userAddress, chainId, gomuSdk, erc20Tokens, maxSelectableAssets } = useContext(WidgetContext)!;
+  const { userAddress, gomuSdk, erc20Tokens, maxSelectableAssets } = useContext(WidgetContext)!;
 
   const listOrders = async () => {
     await Promise.all(pricedAssets.map(async (asset) => {
@@ -98,8 +98,6 @@ const ListingFlow = ({
       componentRenderer: () => {
         return (
           <AssetsList
-            userAddress={userAddress}
-            chainId={chainId}
             selectedIds={selectedAssets.map((a) => a.id)}
             isCompact
             maxSelectableAssets={maxSelectableAssets}
