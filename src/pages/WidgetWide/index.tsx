@@ -1,6 +1,7 @@
+import cn from 'classnames';
 import { ConnectMetamask, Widget } from 'src/components';
 import { useMetamaskNetwork } from 'src/hooks';
-import s from './styles.module.scss';
+import s from '../WidgetMobile/styles.module.scss';
 
 const WidgetWide = () => {
   const { isMMRequired, userAddress, chainId } = useMetamaskNetwork();
@@ -10,8 +11,12 @@ const WidgetWide = () => {
   }
 
   return (
-    <div className={s.demo}>
-      <Widget userAddress={userAddress} chainId={chainId} />
+    <div className={cn(s.demo, s._wide)}>
+      <Widget
+        userAddress={userAddress}
+        chainId={chainId}
+        style={{ height: '100%', borderRadius: 'inherit' }}
+      />
     </div>
   );
 };

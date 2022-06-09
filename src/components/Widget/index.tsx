@@ -22,11 +22,15 @@ const Widget = ({
   userAddress,
   chainId,
   width,
+  height,
+  style: styleFromProps,
   maxSelectableAssets = 4,
 }: {
   userAddress: string;
   chainId: number;
   width?: number | string;
+  height?: number | string;
+  style?: any;
   maxSelectableAssets?: number;
 }) => {
   const TABS_CONFIG = [
@@ -83,7 +87,7 @@ const Widget = ({
     <WidgetContext.Provider value={widgetContext}>
       <div
         className={cn(s.widget, { [s._resized]: isResized.current })}
-        style={{ ...getBreakpointsStyles(breakpointsConfig), width }}
+        style={{ ...getBreakpointsStyles(breakpointsConfig), width, height, ...styleFromProps }}
         ref={widgetRef}
       >
         {isListingFlowActive

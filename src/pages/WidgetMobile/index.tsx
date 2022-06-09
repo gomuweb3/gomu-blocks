@@ -11,7 +11,11 @@ const WidgetMobile = () => {
 
   return (
     <div className={s.demo}>
-      <Widget userAddress={userAddress} chainId={chainId} />
+      <Widget
+        userAddress={userAddress}
+        chainId={chainId}
+        style={{ height: '100%', borderRadius: 'inherit' }}
+      />
     </div>
   );
 };
