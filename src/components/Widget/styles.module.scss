@@ -194,6 +194,8 @@
 
   &Content {
     position: relative;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     min-height: 100px;
     padding-top: 28px;
@@ -212,6 +214,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-shrink: 0;
       height: var(--button-h);
       padding: 0 var(--pad-x);
       margin-bottom: 28px;
@@ -220,7 +223,7 @@
     &Inner {
       overflow-y: auto;
       position: relative;
-      height: 100%;
+      flex-grow: 1;
       padding: 0 var(--pad-x) 20px;
     }
 
