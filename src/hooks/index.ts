@@ -11,7 +11,10 @@ export const useGomuSdk = (chainId: number, address: string) => {
       provider,
       signer: provider.getSigner(),
       address,
-      ...(chainId !== 4 ? { openseaConfig: { apiKey: process.env.REACT_APP_OPENSEA_API_KEY } } : {}),
+      openseaConfig: {
+        useReadOnlyProvider: false,
+        ...(chainId !== 4 && { apiKey: process.env.REACT_APP_OPENSEA_API_KEY }),
+      },
       chainId,
     });
   }, [chainId, address]);
