@@ -82,10 +82,6 @@ const OrdersList = ({
         return null;
       }
 
-      if (order.marketplaceName === 'opensea') {
-        console.log(order.marketplaceOrder);
-      }
-
       return (
         <Order
           key={normalizedOrder.id}

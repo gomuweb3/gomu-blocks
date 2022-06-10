@@ -7,7 +7,6 @@ const onboarding = new MetamaskOnboarding();
 const ConnectMetamask = () => {
   let isMounted = true;
   const [isLoading, setIsLoading] = useState(false);
-  console.log(window.ethereum);
 
   useEffect(() => {
     return () => {
