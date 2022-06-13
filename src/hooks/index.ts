@@ -62,7 +62,7 @@ export const useMetamaskNetwork = (props?: UseMetamaskNetworkProps) => {
   }, [isMMRequired]);
 
   useEffect(() => {
-    if (!isMMRequired) {
+    if (window.ethereum) {
       const provider = new Web3Provider(window.ethereum, 'any');
       provider.on('network', (newNetwork) => {
         handleChainChanged(newNetwork.chainId);
