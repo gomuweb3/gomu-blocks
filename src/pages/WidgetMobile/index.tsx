@@ -6,7 +6,7 @@ const WidgetMobile = () => {
   const { isMMRequired, userAddress, chainId } = useMetamaskNetwork();
 
   if (isMMRequired) {
-    return <ConnectMetamask />;
+    return <ConnectMetamask style={{ height: '100vh' }} />;
   }
 
   return (

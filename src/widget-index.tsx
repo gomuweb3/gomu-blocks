@@ -1,14 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
-import App from "./app";
+import Widget from "./app/widget";
 
 const root = getRoot();
 
 if (root) {
   ReactDOM.render(
     <React.StrictMode>
-      <App />
+      <Widget />
     </React.StrictMode>,
     root
   );
