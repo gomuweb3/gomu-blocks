@@ -7,6 +7,12 @@
 :host, :root {
   --purple: #7965D1;
   font-family: 'Montserrat', Helvetica, Arial, sans-serif;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::-webkit-scrollbar {

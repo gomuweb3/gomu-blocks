@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, CSSProperties } from 'react';
 import MetamaskOnboarding from '@metamask/onboarding';
 import s from './styles.module.scss';
 
 const onboarding = new MetamaskOnboarding();
 
-const ConnectMetamask = () => {
+const ConnectMetamask = ({
+  style: styleFromProps,
+}: {
+  style?: CSSProperties;
+}) => {
   let isMounted = true;
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,12 +38,8 @@ const ConnectMetamask = () => {
 
   if (!window.ethereum /*|| !window.ethereum?.isMetaMask*/) {
     return (
-      <div className={s.connect}>
-        <button
-          type="button"
-          disabled={isLoading}
-          onClick={handleInstallMM}
-        >
+      <div className={s.connect} style={{ ...styleFromProps }}>
+        <button type="button" disabled={isLoading} onClick={handleInstallMM}>
           {isLoading ? 'Onboarding in progress' : 'Install Metamask'}
         </button>
       </div>
@@ -47,11 +47,8 @@ const ConnectMetamask = () => {
   }
 
   return (
-    <div className={s.connect}>
-      <button
-        type="button"
-        onClick={handleConnect}
-      >
+    <div className={s.connect} style={{ ...styleFromProps }}>
+      <button type="button" onClick={handleConnect}>
         Connect
       </button>
     </div>
