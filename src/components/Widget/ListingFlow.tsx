@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
-import { SUPPORTED_CHAIN_IDS_MAPPING } from '@gomuweb3/sdk';
+import { SUPPORTED_CHAIN_IDS_BY_MARKETPLACE } from '@gomuweb3/sdk';
 import { AddressBox } from 'src/components';
 import { rangeFromZero, parseAssetId, toBaseUnitAmount } from 'src/utils';
 import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRightIcon } from 'src/assets/svg';
@@ -101,7 +101,7 @@ const ListingFlow = ({
             amount: '',
             paymentTokenAddress: erc20Tokens[0]?.address,
             selectedMarketplaces: MARKETPLACES.reduce((acc, { key }) => {
-              if (!SUPPORTED_CHAIN_IDS_MAPPING[key].includes(chainId)) {
+              if (!SUPPORTED_CHAIN_IDS_BY_MARKETPLACE[key].includes(chainId)) {
                 return acc;
               }
 
