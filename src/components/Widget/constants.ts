@@ -51,6 +51,14 @@ export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
       imgUrl: 'https://openseauserdata.com/files/accae6b6fb3888cbff27a013729c22dc.svg',
     },
   ],
+  137: [
+    {
+      symbol: 'MATIC',
+      address: '0x0000000000000000000000000000000000001010',
+      decimals: 18,
+      imgUrl: 'https://polygonscan.com/token/images/matic_32.png',
+    }
+  ],
 };
 
 export const MARKETPLACES: MarketplaceConfig[] = [

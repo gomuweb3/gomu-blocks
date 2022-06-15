@@ -12,6 +12,11 @@
     margin-bottom: 12px;
   }
 
+  &._disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   @mixin isChecked {
     #{$checkboxRef}RealCb:checked ~ & {
       @content;
