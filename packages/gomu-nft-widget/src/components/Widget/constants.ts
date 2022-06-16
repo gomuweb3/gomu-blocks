@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import { TokenInfo, MarketplaceConfig, BreakpointsConfigItem, MarketplaceName, OpenseaOrder, TraderOrder } from './types';
+import { TokenInfo, MarketplaceConfig, BreakpointsConfigItem, MarketplaceName, OpenseaOrder, LooksRareOrder, TraderOrder } from './types';
 
 export const ORDER_ID_SEPARATOR = '__';
 
@@ -95,6 +95,38 @@ export const MARKETPLACES: MarketplaceConfig[] = [
         : 'https://opensea.io/assets/ethereum/';
 
       return `${baseUrl}${tokenAddress}/${tokenId}`;
+    },
+  },
+  {
+    key: MarketplaceName.Looksrare,
+    label: 'LooksRare',
+    imgUrl: 'https://i.imgur.com/lB9iJ7A.png',
+    getNormalizedOrder: (originalOrder) => {
+      const { hash, collectionAddress, tokenId, amount, currencyAddress, price } = originalOrder.marketplaceOrder as LooksRareOrder['marketplaceOrder'];
+      return {
+        id: `${MarketplaceName.Looksrare}${ORDER_ID_SEPARATOR}${hash}`,
+        asset: {
+          contractAddress: collectionAddress,
+          tokenId,
+          amount,
+        },
+        erc20Asset: {
+          contractAddress: currencyAddress,
+          amount: new BigNumber(price).toString(),
+        },
+      };
+    },
+    getOrderById: (orders, id) => {
+      return (orders as LooksRareOrder[]).find((o) => o.marketplaceName === 'looksrare' && o.marketplaceOrder.hash === id);
+    },
+    buildExternalLink: (order, chainId) => {
+      if (!order) return '';
+      const { marketplaceOrder } = order as LooksRareOrder;
+      if (!marketplaceOrder) return '';
+      const { collectionAddress, tokenId } = marketplaceOrder;
+      const baseUrl = `https://${chainId === 4 ? 'rinkeby.' : ''}looksrare.org/collections/`;
+
+      return `${baseUrl}${collectionAddress}/${tokenId}`;
     },
   },
   {

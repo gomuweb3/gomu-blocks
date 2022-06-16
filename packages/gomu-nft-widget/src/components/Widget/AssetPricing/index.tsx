@@ -1,5 +1,5 @@
 import { useRef, useEffect, useContext } from 'react';
-import { SUPPORTED_CHAIN_IDS_MAPPING } from '@gomuweb3/sdk';
+import { SUPPORTED_CHAIN_IDS_BY_MARKETPLACE } from '@gomuweb3/sdk';
 import { Dropdown } from 'src/components';
 import { parseAssetId } from 'src/utils';
 import Checkbox from '../Checkbox';
@@ -92,7 +92,7 @@ const AssetPricing = ({
         {MARKETPLACES.map(({ key, label, imgUrl }) => {
           const isSelected = selectedMarketplaces.includes(key);
 
-          if (!SUPPORTED_CHAIN_IDS_MAPPING[key].includes(chainId)) {
+          if (!SUPPORTED_CHAIN_IDS_BY_MARKETPLACE[key].includes(chainId)) {
             return null;
           }
 

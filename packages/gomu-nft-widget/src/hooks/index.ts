@@ -15,6 +15,9 @@ export const useGomuSdk = (chainId: number, address: string) => {
         useReadOnlyProvider: false,
         ...(chainId !== 4 && { apiKey: process.env.REACT_APP_OPENSEA_API_KEY }),
       },
+      looksrareConfig: {
+        ...(chainId !== 4 && { apiKey: process.env.REACT_APP_LOOKSRARE_API_KEY }),
+      },
       chainId,
     });
   }, [chainId, address]);

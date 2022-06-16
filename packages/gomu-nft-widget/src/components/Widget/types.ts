@@ -1,8 +1,8 @@
-import { MarketplaceName, Order as GomuOrder, TraderOrder, OpenseaOrder } from '@gomuweb3/sdk/lib/types';
+import { MarketplaceName, Order as GomuOrder, TraderOrder, OpenseaOrder, LooksRareOrder } from '@gomuweb3/sdk/lib/types';
 import { SupportedNftType } from 'src/typings';
 
 export { MarketplaceName };
-export type { GomuOrder, TraderOrder, OpenseaOrder };
+export type { GomuOrder, TraderOrder, OpenseaOrder, LooksRareOrder };
 
 export interface OrderError {
   marketplaceName: MarketplaceName;
@@ -14,7 +14,7 @@ export interface NormalizedOrder {
   asset: {
     contractAddress: string;
     tokenId: string;
-    type: string;
+    type?: string;
     amount: string;
   };
   erc20Asset: {
