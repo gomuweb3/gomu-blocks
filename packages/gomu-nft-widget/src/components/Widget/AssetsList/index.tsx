@@ -40,6 +40,7 @@ const AssetsList = ({
     ['walletAssets', userAddress, chainId],
     ({ pageParam = '' }) => getWalletAssets({
       address: userAddress,
+      chainId,
       includeNonStandardTokenTypes: true,
       limit: ASSETS_LIMIT,
       cursor: pageParam,

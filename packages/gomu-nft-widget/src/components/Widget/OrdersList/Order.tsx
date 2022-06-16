@@ -43,6 +43,7 @@ const Order = ({
   const { data: nftData } = useQuery(
     ['nftAsset', asset.contractAddress, asset.tokenId],
     () => getNftsByToken({
+      chainId,
       contractAddress: asset.contractAddress!,
       tokenId: asset.tokenId!,
       includeNonStandardTokenTypes: true,
@@ -51,7 +52,7 @@ const Order = ({
 
   const img = getImgFromAsset(nftData?.data?.[0]);
   const name = nftData?.data?.[0]?.name;
-  const erc20TokenInfo = erc20Tokens.find((t) => t.address === erc20Asset.contractAddress);
+  const erc20TokenInfo = erc20Tokens.find((t) => t.address.toLowerCase() === erc20Asset.contractAddress?.toLowerCase());
   const marketplaceInfo = MARKETPLACES.find((mp) => mp.key === originalOrder.marketplaceName);
   const formattedAmount = toUnitAmount(erc20Asset.amount, erc20TokenInfo?.decimals);
   const link = marketplaceInfo?.buildExternalLink ? marketplaceInfo.buildExternalLink(originalOrder, chainId) : '';
