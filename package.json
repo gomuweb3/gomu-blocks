@@ -1,7 +1,8 @@
 {
-  "name": "gomu-demo",
-  "version": "1.0.5",
-  "private": true,
+  "name": "gomu-blocks",
+  "version": "0.0.1",
+  "main": "build/static/gomu-widget.js",
+  "license": "MIT",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@gomuweb3/sdk": "^0.1.2",
