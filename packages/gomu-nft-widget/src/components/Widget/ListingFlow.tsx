@@ -1,5 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import cn from 'classnames';
+import { SUPPORTED_CHAIN_IDS_BY_MARKETPLACE } from '@gomuweb3/sdk';
 import { AddressBox } from 'src/components';
 import { rangeFromZero, parseAssetId, toBaseUnitAmount } from 'src/utils';
 import { ArrowLeftIcon, CartIcon, EditIcon, MenuIcon, CheckCircleIcon, CaretRightIcon } from 'src/assets/svg';
@@ -8,7 +9,7 @@ import AssetPricing from './AssetPricing';
 import AssetsConfirmation from './AssetsConfirmation';
 import { MARKETPLACES } from './constants';
 import { WidgetContext } from './context';
-import { PrimitiveAsset, PricedAsset, GomuOrder, OrderError } from './types';
+import { PrimitiveAsset, PricedAsset, GomuOrder, OrderError, MarketplaceName } from './types';
 import s from './styles.module.scss';
 
 const ICONS_MAPPING: Record<string, any> = {
@@ -30,7 +31,17 @@ const ListingFlow = ({
   const [isEditingAsset, setIsEditingAsset] = useState(false);
   const [isListingOrders, setIsListingOrders] = useState(false);
   const [isFinishedListing, setIsFinishedListing] = useState(false);
-  const { userAddress, gomuSdk, erc20Tokens, maxSelectableAssets } = useContext(WidgetContext)!;
+  const { userAddress, chainId, gomuSdk, erc20Tokens, maxSelectableAssets } = useContext(WidgetContext)!;
+
+  useEffect(() => {
+    setActiveStepIndex(0);
+    setActivePricingSubstepIndex(0);
+    setSelectedAssets([]);
+    setPricedAssets([]);
+    setIsEditingAsset(false);
+    setIsListingOrders(false);
+    setIsFinishedListing(false);
+  }, [chainId]);
 
   const listOrders = async () => {
     await Promise.all(pricedAssets.map(async (asset) => {
@@ -89,7 +100,13 @@ const ListingFlow = ({
             ...asset,
             amount: '',
             paymentTokenAddress: erc20Tokens[0]?.address,
-            selectedMarketplaces: MARKETPLACES.map((mp) => mp.key),
+            selectedMarketplaces: MARKETPLACES.reduce((acc, { key }) => {
+              if (!SUPPORTED_CHAIN_IDS_BY_MARKETPLACE[key].includes(chainId)) {
+                return acc;
+              }
+
+              return acc.concat(key);
+            }, [] as MarketplaceName[]),
             orders: [],
           };
         });

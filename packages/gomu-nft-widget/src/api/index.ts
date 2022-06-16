@@ -5,10 +5,19 @@ export const SUPPORTED_NFT_TYPES: SupportedNftType[] = [
   'ERC1155',
 ];
 
+export const CHAINS_MAPPING: Record<number, string> = {
+  1: 'ethereum',
+  137: 'polygon',
+};
+
+const getChain = (chainId: number) => {
+  return CHAINS_MAPPING[chainId];
+};
+
 interface GetWalletAssetsOptions {
   address: string;
   contractAddress?: string;
-  chain?: string;
+  chainId: number;
   cursor?: string;
   limit?: number;
   includeNonStandardTokenTypes?: boolean;
@@ -47,14 +56,20 @@ const transformNftAssets = (nfts: NftAssetOriginal[], includeNonStandardTokenTyp
     : transformedData.filter((a) => (SUPPORTED_NFT_TYPES as string[]).includes(a.type));
 };
 
-export const getWalletAssets = ({
+export const getWalletAssets = async ({
   address,
   contractAddress,
-  chain,
+  chainId,
   cursor,
   limit = 50,
   includeNonStandardTokenTypes,
 }: GetWalletAssetsOptions): Promise<GetWalletAssetsRes> => {
+  const chain = getChain(chainId);
+
+  if (!chain) {
+    return { data: [], nextCursor: '' };
+  }
+
   return fetch('https://api.gomu.xyz/graphql', {
     method: 'POST',
     headers: {
@@ -85,7 +100,7 @@ export const getWalletAssets = ({
 interface GetNftsByTokenOptions {
   contractAddress: string;
   tokenId?: string;
-  chain?: string;
+  chainId: number;
   cursor?: string;
   limit?: number;
   includeTraits?: boolean;
@@ -93,14 +108,20 @@ interface GetNftsByTokenOptions {
   includeNonStandardTokenTypes?: boolean;
 }
 
-export const getNftsByToken = ({
+export const getNftsByToken = async ({
   contractAddress,
   tokenId,
-  chain,
+  chainId,
   cursor,
   limit,
   includeNonStandardTokenTypes,
 }: GetNftsByTokenOptions): Promise<GetWalletAssetsRes> => {
+  const chain = getChain(chainId);
+
+  if (!chain) {
+    return { data: [], nextCursor: '' };
+  }
+
   return fetch('https://api.gomu.xyz/graphql', {
     method: 'POST',
     headers: {

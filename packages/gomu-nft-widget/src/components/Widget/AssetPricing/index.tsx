@@ -1,7 +1,9 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
+import { SUPPORTED_CHAIN_IDS_BY_MARKETPLACE } from '@gomuweb3/sdk';
 import { Dropdown } from 'src/components';
 import { parseAssetId } from 'src/utils';
 import Checkbox from '../Checkbox';
+import { WidgetContext } from '../context';
 import { MARKETPLACES } from '../constants';
 import { PricedAsset, TokenInfo, MarketplaceName } from '../types';
 import s from './styles.module.scss';
@@ -17,6 +19,7 @@ const AssetPricing = ({
   onChange: (updatedAsset: PricedAsset) => void;
   onConfirm: () => void;
 }) => {
+  const { chainId } = useContext(WidgetContext)!;
   const inputRef = useRef<HTMLInputElement>(null);
   const { id, name, img, amount, paymentTokenAddress, selectedMarketplaces } = asset;
   const { tokenId } = parseAssetId(id);
@@ -88,6 +91,10 @@ const AssetPricing = ({
       <div className={s.pricingMarketplaces}>
         {MARKETPLACES.map(({ key, label, imgUrl }) => {
           const isSelected = selectedMarketplaces.includes(key);
+
+          if (!SUPPORTED_CHAIN_IDS_BY_MARKETPLACE[key].includes(chainId)) {
+            return null;
+          }
 
           return (
             <Checkbox
