@@ -9,7 +9,9 @@ const WidgetPlain = () => {
   return (
     <div className={cn(s.widgetContainer)}>
       {isMMRequired ? (
-        <ConnectMetamask />
+        <ConnectMetamask
+          style={{ position: 'absolute', width: '100%', height: '100%' }}
+        />
       ) : (
         <Widget
           userAddress={userAddress}

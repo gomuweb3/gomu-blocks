@@ -1,6 +1,7 @@
 @import '/src/styles/globals';
 
 .widgetContainer {
+  position: relative;
   min-width: 360px; // follow uniswap widget dimension
   min-height: 360px;
   width: 100%;
