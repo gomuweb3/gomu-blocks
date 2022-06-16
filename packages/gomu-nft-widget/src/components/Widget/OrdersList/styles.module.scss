@@ -1,0 +1,97 @@
+@import '/src/styles/globals';
+
+.order {
+  position: relative;
+  display: flex;
+  align-items: center;
+  column-gap: 12px;
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  &._cancelled {
+    filter: grayscale(1);
+    pointer-events: none;
+  }
+
+  &Checkbox {
+    flex-shrink: 0;
+  }
+
+  &Inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    min-width: 100px;
+    column-gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    background: #F6F3FF;
+  }
+
+  &Img {
+    position: relative;
+    flex-shrink: 0;
+    width: 82px;
+    height: 82px;
+    border-radius: 8px;
+    background: var(--plc-bg);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+    }
+  }
+
+  &Info {
+    position: relative;
+    flex-grow: 1;
+    min-width: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #111111;
+
+    p {
+      @include overflowedText;
+    }
+  }
+
+  &Erc20 {
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+
+    img {
+      height: 16px;
+    }
+  }
+
+  &Secondary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 400;
+    color: #6B6B6B;
+
+    a {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &Link {
+      fill: #9A64F3;
+    }
+  }
+}

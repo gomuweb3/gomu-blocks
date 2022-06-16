@@ -1,0 +1,256 @@
+@import '/src/styles/globals';
+
+.dropdown {
+  $parentRef: &;
+
+  --opened-z-index: 1000;
+  --y-gap: 14px;
+  --items-w: 140px;
+  --item-h: 48px;
+  --items-visible: 10;
+  --items-y-pad: 8px;
+  --border-radius: 8px;
+  --confirm-h: 36px;
+  --color: #0A0A0A;
+
+  z-index: 1;
+  position: relative;
+  perspective: 1000px;
+  perspective-origin: 0 50%;
+
+  &._open {
+    z-index: var(--opened-z-index);
+  }
+
+  &._disabled {
+    pointer-events: none;
+  }
+
+  &._multi {
+    --items-w: 100%;
+  }
+
+  @mixin isOpen {
+    #{$parentRef}._open & {
+      @content;
+    }
+  }
+
+  @mixin rightAligned {
+    #{$parentRef}._right & {
+      @content;
+    }
+  }
+
+  @mixin isMultiSelect {
+    #{$parentRef}._multi & {
+      @content;
+    }
+  }
+
+  @mixin withConfirm {
+    #{$parentRef}._withConfirm & {
+      @content;
+    }
+  }
+
+  &Label {
+    margin-bottom: 14px;
+    font-size: 12px;
+    color: #668BD2;
+  }
+
+  &Toggler {
+    position: relative;
+    cursor: pointer;
+
+    &Box {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      column-gap: 7px;
+      height: 40px;
+      padding: 0 16px;
+      border: 1px solid #EEEEEE;
+      border-radius: var(--border-radius);
+      background: #fff;
+      color: var(--color);
+      cursor: pointer;
+
+      p {
+        flex-grow: 1;
+        @include overflowedText;
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+
+        img {
+          height: 16px;
+        }
+
+        span {
+          color: #486191;
+        }
+      }
+
+      svg {
+        flex-shrink: 0;
+        stroke: var(--color);
+      }
+    }
+  }
+
+  &Search {
+    width: calc(100% - 30px);
+    height: 100%;
+    border: none;
+    padding: 0;
+  }
+
+  &Selected {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #0D2655;
+
+    &Remove {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      margin-left: 6px;
+      opacity: 0.6;
+      cursor: pointer;
+
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        left: -2px;
+        top: 50%;
+        width: 14px;
+        height: 2px;
+        margin-top: -1px;
+        background: #fff;
+      }
+
+      &:before {
+        transform: rotate(45deg);
+      }
+
+      &:after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+
+  &Items {
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--y-gap));
+    width: var(--items-w);
+    padding: var(--items-y-pad) 0;
+    border-radius: var(--border-radius);
+    background: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    pointer-events: none;
+    transform: rotateX(-30deg);
+
+    @include isOpen {
+      z-index: var(--opened-z-index);
+      transition: all 0.2s;
+      transform: rotateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @include rightAligned {
+      left: auto;
+      right: 0;
+    }
+
+    @include isMultiSelect {
+      width: 100%;
+    }
+
+    @include withConfirm {
+      padding-bottom: var(--confirm-h);
+    }
+
+    &List {
+      overflow-y: auto;
+      position: relative;
+      max-height: calc(var(--items-visible) * var(--item-h));
+      will-change: transform;
+    }
+  }
+
+  &Item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 8px;
+    height: var(--item-h);
+    padding: 0 16px;
+    cursor: pointer;
+
+    &:first-child {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+
+    &:last-child {
+      border-bottom-left-radius: var(--border-radius);
+      border-bottom-right-radius: var(--border-radius);
+    }
+
+    img {
+      height: 16px;
+    }
+
+    p {
+      @include overflowedText;
+
+      font-size: 14px;
+      color: var(--color);
+      transition: color 0.3s;
+    }
+
+    &:hover,
+    &._selected {
+      p {
+        color: var(--purple);
+      }
+
+      @include isMultiSelect {
+        background: rgba(#BCB2E8, 0.5);
+
+        p {
+          color: var(--color);
+        }
+      }
+    }
+  }
+
+  &Confirm {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: var(--confirm-h);
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    background: var(--purple);
+    font-size: 16px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+  }
+}

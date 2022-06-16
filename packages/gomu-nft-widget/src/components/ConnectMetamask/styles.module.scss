@@ -1,0 +1,12 @@
+.connect {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  button {
+    background: #fff;
+    color: var(--purple);
+  }
+}
