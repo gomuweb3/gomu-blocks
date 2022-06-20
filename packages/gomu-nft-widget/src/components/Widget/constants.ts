@@ -67,9 +67,23 @@ export const MARKETPLACES: MarketplaceConfig[] = [
     label: 'OpenSea',
     imgUrl: 'https://i.imgur.com/5RxA58Z.png',
     getNormalizedOrder: (originalOrder) => {
-      const { hash, asset, quantity, paymentToken, basePrice } = originalOrder.marketplaceOrder as OpenseaOrder['marketplaceOrder'];
+      console.log('ORDER', originalOrder.marketplaceOrder);
       return {
-        id: `${MarketplaceName.Opensea}${ORDER_ID_SEPARATOR}${hash}`,
+        id: 'kek',
+        asset: {
+          contractAddress: '',
+          tokenId: '',
+          type: '',
+          amount: '',
+        },
+        erc20Asset: {
+          contractAddress: '',
+          amount: '',
+        }
+      };
+      /* const { orderHash, asset, quantity, paymentToken, currentPrice } = originalOrder.marketplaceOrder as OpenseaOrder['marketplaceOrder'];
+      return {
+        id: `${MarketplaceName.Opensea}${ORDER_ID_SEPARATOR}${orderHash}`,
         asset: {
           contractAddress: asset!.tokenAddress,
           tokenId: asset!.tokenId!,
@@ -78,14 +92,15 @@ export const MARKETPLACES: MarketplaceConfig[] = [
         },
         erc20Asset: {
           contractAddress: paymentToken,
-          amount: new BigNumber(basePrice).toString(),
+          amount: new BigNumber(currentPrice).toString(),
         },
-      };
+      }; */
     },
     getOrderById: (orders, id) => {
-      return (orders as OpenseaOrder[]).find((o) => o.marketplaceName === 'opensea' && o.marketplaceOrder.hash === id);
+      return undefined;
+      // return (orders as OpenseaOrder[]).find((o) => o.marketplaceName === 'opensea' && o.marketplaceOrder.hash === id);
     },
-    buildExternalLink: (order, chainId) => {
+    /* buildExternalLink: (order, chainId) => {
       if (!order) return '';
       const { marketplaceOrder } = order as OpenseaOrder;
       if (!marketplaceOrder) return '';
@@ -95,7 +110,7 @@ export const MARKETPLACES: MarketplaceConfig[] = [
         : 'https://opensea.io/assets/ethereum/';
 
       return `${baseUrl}${tokenAddress}/${tokenId}`;
-    },
+    }, */
   },
   {
     key: MarketplaceName.Looksrare,
