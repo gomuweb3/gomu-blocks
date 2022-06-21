@@ -1,22 +1,28 @@
-import { Web3Provider } from '@ethersproject/providers';
+import { Web3Provider, ExternalProvider } from '@ethersproject/providers';
 import { useEffect, useMemo, useState } from 'react';
 import { getConnectionInfo } from 'src/utils';
 import { Gomu } from '@gomuweb3/sdk';
 
-export const useGomuSdk = (chainId: number, address: string) => {
+export const useGomuSdk = (
+  chainId: number,
+  address: string,
+  provider?: ExternalProvider
+) => {
   return useMemo(() => {
-    const provider = new Web3Provider(window.ethereum);
+    const web3Provider = new Web3Provider(provider || window.ethereum);
 
     return new Gomu({
-      provider,
-      signer: provider.getSigner(),
+      provider: web3Provider,
+      signer: web3Provider.getSigner(),
       address,
       openseaConfig: {
         useReadOnlyProvider: false,
         ...(chainId !== 4 && { apiKey: process.env.REACT_APP_OPENSEA_API_KEY }),
       },
       looksrareConfig: {
-        ...(chainId !== 4 && { apiKey: process.env.REACT_APP_LOOKSRARE_API_KEY }),
+        ...(chainId !== 4 && {
+          apiKey: process.env.REACT_APP_LOOKSRARE_API_KEY,
+        }),
       },
       chainId,
     });
@@ -57,10 +63,12 @@ export const useMetamaskNetwork = (props?: UseMetamaskNetworkProps) => {
 
   useEffect(() => {
     if (!isMMRequired) {
-      getConnectionInfo().then((info) => {
-        setUserAddress(info.address);
-        setChainId(info.chainId);
-      }).catch(() => setIsMMRequired(true));
+      getConnectionInfo()
+        .then((info) => {
+          setUserAddress(info.address);
+          setChainId(info.chainId);
+        })
+        .catch(() => setIsMMRequired(true));
     }
   }, [isMMRequired]);
 
@@ -75,7 +83,10 @@ export const useMetamaskNetwork = (props?: UseMetamaskNetworkProps) => {
 
       return () => {
         provider.off('network');
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        window.ethereum.removeListener(
+          'accountsChanged',
+          handleAccountsChanged
+        );
       };
     }
   }, [isMMRequired]); // eslint-disable-line react-hooks/exhaustive-deps
