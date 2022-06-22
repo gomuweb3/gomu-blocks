@@ -1,7 +1,9 @@
 import React from 'react';
 import { ExternalProvider } from '@ethersproject/providers';
-import { useConnect, useAccount } from 'wagmi';
+import { useConnect, useAccount, Connector } from 'wagmi';
 import s from './profile.styles.module.scss';
+
+const METAMASK_ID = 'metaMask';
 
 interface Props {
   connectWalletStyle?: React.CSSProperties;
@@ -36,6 +38,51 @@ export default function Profile({
     }
   );
 
+  function makeConnectorButton(connector: Connector) {
+    if (!connector.ready && connector.id === METAMASK_ID) {
+      return makeMetaMaskDeeplinkButton(connector);
+    }
+
+    return (
+      <button
+        disabled={!connector.ready}
+        key={connector.id}
+        onClick={() => connect(connector)}
+      >
+        {connector.name}
+        {!connector.ready && ' (unsupported)'}
+        {isConnecting &&
+          connector.id === pendingConnector?.id &&
+          ' (connecting)'}
+      </button>
+    );
+  }
+
+  function makeMetaMaskDeeplinkButton(connector: Connector) {
+    return (
+      <button
+        key={connector.id}
+        onClick={() =>
+          openMetaMaskUrl(
+            `https://metamask.app.link/dapp/${window.location.host}${window.location.pathname}`
+          )
+        }
+      >
+        {connector.name}
+      </button>
+    );
+  }
+
+  function openMetaMaskUrl(url: string) {
+    window.open(url, '_self');
+    // const a = document.createElement('a');
+    // a.href = url;
+    // a.target = '_self';
+    // document.body.appendChild(a);
+    // a.click();
+    // a.remove();
+  }
+
   return data && provider ? (
     <>{clonedChildren}</>
   ) : (
@@ -43,19 +90,7 @@ export default function Profile({
       <div className={s.header}>Connect a Wallet</div>
 
       <div className={s.buttonContainer}>
-        {connectors.map((connector) => (
-          <button
-            disabled={!connector.ready}
-            key={connector.id}
-            onClick={() => connect(connector)}
-          >
-            {connector.name}
-            {!connector.ready && ' (unsupported)'}
-            {isConnecting &&
-              connector.id === pendingConnector?.id &&
-              ' (connecting)'}
-          </button>
-        ))}
+        {connectors.map((connector) => makeConnectorButton(connector))}
       </div>
 
       {error && <div className={s.errorMessage}>{error.message}</div>}
