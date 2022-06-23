@@ -26,7 +26,7 @@ export const useGomuSdk = (
       },
       chainId,
     });
-  }, [chainId, address]);
+  }, [chainId, address, provider]);
 };
 
 interface UseMetamaskNetworkProps {

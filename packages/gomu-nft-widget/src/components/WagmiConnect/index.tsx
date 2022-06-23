@@ -1,4 +1,4 @@
-import { CSSProperties, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import {
   WagmiConfig,
@@ -13,12 +13,6 @@ import { publicProvider } from 'wagmi/providers/public';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-
-import Profile from './Profile';
-
-interface Props {
-  connectWalletStyle?: CSSProperties;
-}
 
 const infuraId = process.env.REACT_APP_INFURA_ID;
 
@@ -50,15 +44,8 @@ const client = createClient({
 });
 
 // Pass client to React Context Provider
-const WagmiConnect = ({
-  connectWalletStyle,
-  children,
-}: PropsWithChildren<Props>) => {
-  return (
-    <WagmiConfig client={client}>
-      <Profile connectWalletStyle={connectWalletStyle}>{children}</Profile>
-    </WagmiConfig>
-  );
+const WagmiConnect = ({ children }: PropsWithChildren<{}>) => {
+  return <WagmiConfig client={client}>{children}</WagmiConfig>;
 };
 
 export default WagmiConnect;
