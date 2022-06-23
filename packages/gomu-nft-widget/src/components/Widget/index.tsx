@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import useResizeObserver from '@react-hook/resize-observer';
+import { ExternalProvider } from '@ethersproject/providers';
 import cn from 'classnames';
 import { AddressBox } from 'src/components';
 import { useGomuSdk } from 'src/hooks';
@@ -11,12 +12,13 @@ import { BreakpointsConfigItem } from './types';
 import YourNfts from './YourNfts';
 import OrdersList from './OrdersList';
 import ListingFlow from './ListingFlow';
+
 import s from './styles.module.scss';
 
 enum TABS {
   Nfts = 'nfts',
   Orders = 'orders',
-};
+}
 
 const Widget = ({
   userAddress,
@@ -25,6 +27,7 @@ const Widget = ({
   height,
   style: styleFromProps,
   maxSelectableAssets = 4,
+  provider,
 }: {
   userAddress: string;
   chainId: number;
@@ -32,6 +35,7 @@ const Widget = ({
   height?: number | string;
   style?: any;
   maxSelectableAssets?: number;
+  provider?: ExternalProvider;
 }) => {
   const TABS_CONFIG = [
     {
@@ -57,10 +61,11 @@ const Widget = ({
 
   const [activeTab, setActiveTab] = useState<`${TABS}`>(TABS_CONFIG[0].key);
   const [isListingFlowActive, setIsListingFlowActive] = useState(false);
-  const [breakpointsConfig, setBreakpointsConfig] = useState<BreakpointsConfigItem>(BREAKPOINTS_CONFIG[0]);
+  const [breakpointsConfig, setBreakpointsConfig] =
+    useState<BreakpointsConfigItem>(BREAKPOINTS_CONFIG[0]);
   const widgetRef = useRef(null);
   const isResized = useRef(false);
-  const gomuSdk = useGomuSdk(chainId, userAddress);
+  const gomuSdk = useGomuSdk(chainId, userAddress, provider);
 
   useResizeObserver(widgetRef, (entry) => {
     const newConfig = getBreakpointsConfig(entry.contentRect.width);
@@ -72,7 +77,9 @@ const Widget = ({
     }
   });
 
-  const activeTabConfig = TABS_CONFIG.find((tabConfig) => tabConfig.key === activeTab)!;
+  const activeTabConfig = TABS_CONFIG.find(
+    (tabConfig) => tabConfig.key === activeTab
+  )!;
   const erc20Tokens = ERC20_TOKENS[chainId] || [];
 
   const widgetContext = {
@@ -87,37 +94,45 @@ const Widget = ({
     <WidgetContext.Provider value={widgetContext}>
       <div
         className={cn(s.widget, { [s._resized]: isResized.current })}
-        style={{ ...getBreakpointsStyles(breakpointsConfig), width, height, ...styleFromProps }}
+        style={{
+          ...getBreakpointsStyles(breakpointsConfig),
+          width,
+          height,
+          ...styleFromProps,
+        }}
         ref={widgetRef}
       >
-        {isListingFlowActive
-          ? <ListingFlow onClose={() => setIsListingFlowActive(false)} />
-          : (
-            <>
-              <div className={s.widgetHeader}>
-                <div className={s.widgetHeaderTop}>
-                  <GomuLogoBox />
-                  <AddressBox address={userAddress} />
-                </div>
-                <div className={s.widgetNav}>
-                  {TABS_CONFIG.map(({ key, heading }) => {
-                    return (
-                      <div
-                        key={key}
-                        className={cn(s.widgetNavTab, { [s._active]: activeTab === key })}
-                        style={{ '--nav-num-of-items': TABS_CONFIG.length } as any}
-                        onClick={() => setActiveTab(key)}
-                      >
-                        {heading}
-                      </div>
-                    );
-                  })}
-                </div>
+        {isListingFlowActive ? (
+          <ListingFlow onClose={() => setIsListingFlowActive(false)} />
+        ) : (
+          <>
+            <div className={s.widgetHeader}>
+              <div className={s.widgetHeaderTop}>
+                <GomuLogoBox />
+                <AddressBox address={userAddress} />
               </div>
-              {activeTabConfig.componentRenderer()}
-            </>
-          )
-        }
+              <div className={s.widgetNav}>
+                {TABS_CONFIG.map(({ key, heading }) => {
+                  return (
+                    <div
+                      key={key}
+                      className={cn(s.widgetNavTab, {
+                        [s._active]: activeTab === key,
+                      })}
+                      style={
+                        { '--nav-num-of-items': TABS_CONFIG.length } as any
+                      }
+                      onClick={() => setActiveTab(key)}
+                    >
+                      {heading}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            {activeTabConfig.componentRenderer()}
+          </>
+        )}
       </div>
     </WidgetContext.Provider>
   );
