@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@gomuweb3/sdk": "^0.1.4",
+    "@gomuweb3/sdk": "^0.1.5",
     "@metamask/onboarding": "^1.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@react-hook/resize-observer": "^1.2.5",
