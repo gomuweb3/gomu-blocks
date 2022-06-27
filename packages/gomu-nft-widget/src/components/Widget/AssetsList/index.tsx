@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { getWalletAssets, SUPPORTED_NFT_TYPES } from 'src/api';
 import { getAssetId, getImgFromAsset, rangeFromZero } from 'src/utils';
 import { NftAsset } from 'src/typings';
+import { SHARED_STOREFRONT_CONTRACT_ADDRESS } from '../constants';
 import { WidgetContext } from '../context';
 import { PrimitiveAsset } from '../types';
 import s from './styles.module.scss';
@@ -126,7 +127,8 @@ const AssetsList = ({
             const img = getImgFromAsset(asset);
             const tokenId = `#${asset.tokenId}`;
             const typeIsSupported = (SUPPORTED_NFT_TYPES as string[]).includes(asset.type);
-            const isDisabled = !isStatic && !typeIsSupported;
+            const isSharedFrontContract = asset.tokenAddress === SHARED_STOREFRONT_CONTRACT_ADDRESS; // shared storefront not supported by opensea
+            const isDisabled = !isStatic && (!typeIsSupported || isSharedFrontContract);
 
             return (
               <div

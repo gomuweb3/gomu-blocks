@@ -1,6 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 import { TokenInfo, MarketplaceConfig, BreakpointsConfigItem, MarketplaceName, OpenseaOrder, LooksRareOrder, TraderOrder } from './types';
 
+export const SHARED_STOREFRONT_CONTRACT_ADDRESS = '0x495f947276749ce646f68ac8c248420045cb7b5e';
+
 export const ORDER_ID_SEPARATOR = '__';
 
 export const ERC20_TOKENS: Record<number, TokenInfo[]> = {
