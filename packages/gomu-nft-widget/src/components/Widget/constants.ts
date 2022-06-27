@@ -67,34 +67,38 @@ export const MARKETPLACES: MarketplaceConfig[] = [
     label: 'OpenSea',
     imgUrl: 'https://i.imgur.com/5RxA58Z.png',
     getNormalizedOrder: (originalOrder) => {
-      const { hash, asset, quantity, paymentToken, basePrice } = originalOrder.marketplaceOrder as OpenseaOrder['marketplaceOrder'];
+      const { orderHash, makerAssetBundle, takerAssetBundle, currentPrice, side } = originalOrder.marketplaceOrder as OpenseaOrder['marketplaceOrder'];
+      const asset = side === 'ask' ? makerAssetBundle.assets[0] : takerAssetBundle.assets[0];
+      const paymentAsset = side === 'ask' ? takerAssetBundle.assets[0] : makerAssetBundle.assets[0];
+
       return {
-        id: `${MarketplaceName.Opensea}${ORDER_ID_SEPARATOR}${hash}`,
+        id: `${MarketplaceName.Opensea}${ORDER_ID_SEPARATOR}${orderHash}`,
         asset: {
-          contractAddress: asset!.tokenAddress,
-          tokenId: asset!.tokenId!,
-          type: asset!.assetContract.schemaName,
-          amount: new BigNumber(quantity).toString(),
+          contractAddress: asset.assetContract.address,
+          tokenId: asset.tokenId!,
+          type: asset.assetContract.schemaName,
+          amount: '1',
         },
         erc20Asset: {
-          contractAddress: paymentToken,
-          amount: new BigNumber(basePrice).toString(),
+          contractAddress: paymentAsset.assetContract.address,
+          amount: new BigNumber(currentPrice).toString(),
         },
       };
     },
     getOrderById: (orders, id) => {
-      return (orders as OpenseaOrder[]).find((o) => o.marketplaceName === 'opensea' && o.marketplaceOrder.hash === id);
+      return (orders as OpenseaOrder[]).find((o) => o.marketplaceName === 'opensea' && o.marketplaceOrder.orderHash === id);
     },
     buildExternalLink: (order, chainId) => {
       if (!order) return '';
       const { marketplaceOrder } = order as OpenseaOrder;
       if (!marketplaceOrder) return '';
-      const { tokenAddress, tokenId } = marketplaceOrder.asset!;
+      const { side, makerAssetBundle, takerAssetBundle } = marketplaceOrder;
+      const asset = side === 'ask' ? makerAssetBundle.assets[0] : takerAssetBundle.assets[0];
       const baseUrl = chainId === 4
         ? 'https://testnets.opensea.io/assets/rinkeby/'
         : 'https://opensea.io/assets/ethereum/';
 
-      return `${baseUrl}${tokenAddress}/${tokenId}`;
+      return `${baseUrl}${asset.assetContract.address}/${asset.tokenId}`;
     },
   },
   {
