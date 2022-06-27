@@ -1,0 +1,44 @@
+.container {
+  border-radius: 8px;
+  background: #fff;
+  padding: 1rem;
+}
+
+.header {
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  margin-bottom: 0.5rem;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem
+}
+
+.walletConnectButton {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+
+.walletName {
+  margin-right: auto;
+}
+
+.walletLoader {
+  height: 1rem;
+  stroke: #FFF;
+  margin-right: 0.5rem;
+}
+
+.walletLogo {
+  height: 2rem;
+}
+
+.errorMessage {
+  text-align: center;
+  color: var(--danger);
+  margin-top: 0.5rem;
+}
