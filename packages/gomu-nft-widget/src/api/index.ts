@@ -70,7 +70,7 @@ export const getWalletAssets = async ({
     return { data: [], nextCursor: '' };
   }
 
-  return fetch('https://api.gomu.xyz/graphql', {
+  return fetch('https://api.gomu.co/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export const getNftsByToken = async ({
     return { data: [], nextCursor: '' };
   }
 
-  return fetch('https://api.gomu.xyz/graphql', {
+  return fetch('https://api.gomu.co/graphql', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
