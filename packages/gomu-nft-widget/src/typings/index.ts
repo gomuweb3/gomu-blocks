@@ -11,11 +11,8 @@ export interface NftAssetMetadata {
 
 export interface NftAssetOriginal {
   contractAddress: string;
+  contractStandard: string;
   tokenId: string;
-  contract: {
-    standard: string;
-    name: string;
-  }
   metadata?: NftAssetMetadata;
 }
 

@@ -30,11 +30,8 @@ interface GetWalletAssetsRes {
 
 const nftItemFragment = `
   contractAddress
+  contractStandard
   tokenId
-  contract {
-    standard
-    name
-  }
   metadata {
     name
     description
@@ -45,8 +42,8 @@ const nftItemFragment = `
   }
 `;
 
-const transformNftAssetData = ({ contractAddress, contract, ...rest }: NftAssetOriginal): NftAsset => {
-  return { ...rest, tokenAddress: contractAddress, type: contract.standard, name: contract.name };
+const transformNftAssetData = ({ contractAddress, contractStandard, ...rest }: NftAssetOriginal): NftAsset => {
+  return { ...rest, tokenAddress: contractAddress, type: contractStandard, name: rest.metadata?.name || '' };
 };
 
 const transformNftAssets = (nfts: NftAssetOriginal[], includeNonStandardTokenTypes = false) => {
